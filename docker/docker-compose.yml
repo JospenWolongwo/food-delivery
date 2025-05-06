@@ -1,0 +1,71 @@
+version: "3.8"
+
+services:
+  # Backend services
+  api:
+    build:
+      context: ../server
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ../server:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - NODE_ENV=development
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=food_delivery
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=dev_secret_key
+      - JWT_EXPIRES_IN=1h
+
+  # Database
+  postgres:
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=food_delivery
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ../docker/scripts/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+
+  # Cache
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  # Web application
+  web:
+    build:
+      context: ../web-app
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ../web-app:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:3000/api
+
+  # Additional services for development
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
+volumes:
+  postgres-data:
+  redis-data:
