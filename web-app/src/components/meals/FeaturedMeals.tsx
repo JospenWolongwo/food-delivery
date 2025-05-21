@@ -11,7 +11,7 @@ const mockMeals = [
     description:
       "Traditional Cameroonian dish made with stewed nuts, ndolé leaves, and fish or beef.",
     price: 3500,
-    imageUrl: "/meals/ndole.png",
+    imageUrl: "/meals/ndole.jpg",
     isAvailable: true,
     rating: 4.9,
     reviewCount: 128,
@@ -30,7 +30,7 @@ const mockMeals = [
     description:
       "Directeur Général chicken - a delicious dish with chicken, plantains, and vegetables in a rich sauce.",
     price: 4200,
-    imageUrl: "/meals/grilled-chicken.png",
+    imageUrl: "/meals/grilled-chicken.jpg",
     isAvailable: true,
     rating: 4.8,
     reviewCount: 95,
@@ -45,30 +45,48 @@ const mockMeals = [
   },
   {
     id: "3",
-    name: "Eru",
-    description:
-      "A nutritious vegetable soup made with finely shredded eru leaves, waterleaf, and meat or fish.",
-    price: 3000,
-    imageUrl: "/meals/eru.png",
+    name: "Borny fish",
+    description: "Borny fish  with boboloh, peppers, and aromatic spices.",
+    price: 3200,
+    imageUrl: "/meals/borny-fish.jpg",
     isAvailable: true,
-    rating: 4.7,
-    reviewCount: 82,
-    category: "Traditional",
+    rating: 4.6,
+    reviewCount: 63,
+    category: "Rice",
     vendor: {
-      name: "Douala Kitchen",
+      name: "Yaounde Dovv",
       logoUrl: "/images/vendor-placeholder.svg",
     },
     nutritionalInfo: {
-      calories: 450,
+      calories: 520,
     },
   },
   {
     id: "4",
+    name: "Okok",
+    description: "Okok  with boboloh, peppers, and aromatic spices.",
+    price: 3200,
+    imageUrl: "/meals/okok.jpg",
+    isAvailable: true,
+    rating: 4.6,
+    reviewCount: 63,
+    category: "Okok",
+    vendor: {
+      name: "Yaounde Dovv",
+      logoUrl: "/images/vendor-placeholder.svg",
+    },
+    nutritionalInfo: {
+      calories: 520,
+    },
+  },
+
+  {
+    id: "5",
     name: "Jollof Rice",
     description:
       "Spicy rice dish cooked with tomatoes, peppers, and aromatic spices, served with grilled chicken.",
     price: 3200,
-    imageUrl: "/meals/jollof-rice.png",
+    imageUrl: "/meals/jollof-rice.jpg",
     isAvailable: true,
     rating: 4.6,
     reviewCount: 63,
@@ -82,12 +100,12 @@ const mockMeals = [
     },
   },
   {
-    id: "5",
-    name: "Mbongo Tchobi",
+    id: "6",
+    name: "Yam",
     description:
-      "Traditional black soup made with a special spice blend and fish or meat, served with plantains or rice.",
+      "Traditional yam made with a special spice blend and cow meat, served with palm oil.",
     price: 3800,
-    imageUrl: "/meals/mbongo-tchobi.png",
+    imageUrl: "/meals/yam.jpg",
     isAvailable: true,
     rating: 4.5,
     reviewCount: 54,
@@ -101,12 +119,50 @@ const mockMeals = [
     },
   },
   {
-    id: "6",
+    id: "7",
     name: "Koki Beans",
     description:
       "Savory bean pudding made from black-eyed peas, wrapped in banana leaves and steamed to perfection.",
     price: 2800,
-    imageUrl: "/meals/koki-beans.png",
+    imageUrl: "/meals/koki-beans.jpg",
+    isAvailable: true,
+    rating: 4.7,
+    reviewCount: 42,
+    category: "Traditional",
+    vendor: {
+      name: "Limbe Cuisine",
+      logoUrl: "/images/vendor-placeholder.svg",
+    },
+    nutritionalInfo: {
+      calories: 380,
+    },
+  },
+  {
+    id: "8",
+    name: "Egusi",
+    description:
+      "egusi pudding made from black-eyed peas, wrapped in banana leaves and steamed to perfection.",
+    price: 2800,
+    imageUrl: "/meals/egusi.jpg",
+    isAvailable: true,
+    rating: 4.7,
+    reviewCount: 42,
+    category: "Traditional",
+    vendor: {
+      name: "Limbe Cuisine",
+      logoUrl: "/images/vendor-placeholder.svg",
+    },
+    nutritionalInfo: {
+      calories: 380,
+    },
+  },
+  {
+    id: "9",
+    name: "Pilé",
+    description:
+      "Potatoes bean pudding made from black-eyed beans, pound with palm oil to perfection.",
+    price: 2800,
+    imageUrl: "/meals/pile.jpg",
     isAvailable: true,
     rating: 4.7,
     reviewCount: 42,
@@ -127,7 +183,6 @@ const FeaturedMeals: React.FC = () => {
 
   // Using mock data instead of API call
   const data = { items: mockMeals };
-  console.log("Mock meals data:", mockMeals);
   const isLoading = false;
   const error = null;
 
