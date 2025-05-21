@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import MealsPage from './pages/MealsPage';
 import MealDetailPage from './pages/MealDetailPage';
+import CheckoutPage from './pages/CheckoutPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 // Import components
@@ -50,6 +51,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/meals" element={<MealsPage />} />
           <Route path="/meals/:id" element={<MealDetailPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
