@@ -8,8 +8,8 @@ import PaymentMethodStep from '../components/checkout/PaymentMethodStep';
 import OrderSummaryStep from '../components/checkout/OrderSummaryStep';
 import OrderConfirmationStep from '../components/checkout/OrderConfirmationStep';
 import CheckoutProgress from '../components/checkout/CheckoutProgress';
-import { checkoutService, DeliveryDetails, PaymentDetails, OrderResponse } from '../services/checkoutService';
-import { CartItem } from '../store/slices/cartSlice';
+import { checkoutService, DeliveryDetails, PaymentDetails } from '../services/checkoutService';
+import { CartItem as StoreCartItem } from '../store/slices/cartSlice';
 
 type CheckoutStep = 'delivery' | 'payment' | 'summary' | 'confirmation';
 
@@ -20,22 +20,32 @@ const mockTotal = mockCartItems.reduce((sum, item) => sum + (item.price * item.q
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   
-  // Use mock data for testing or real data from Redux
-  // const { items, total } = useSelector((state: RootState) => state.cart);
-  const items = mockCartItems;
-  const total = mockTotal;
+  // Determine if we should use mock data or real data from Redux
+  const { items: cartItems, total: cartTotal } = useSelector((state: RootState) => state.cart);
   
-  // Get authentication data from Redux or mock data for development
+  // Helper to detect if we're in development mode using Vite's environment variables
+  const isDev = () => {
+    try {
+      // @ts-ignore - Vite specific 
+      return import.meta.env?.MODE === 'development';
+    } catch (e) {
+      return process.env.NODE_ENV === 'development';
+    }
+  };
+  
+  // Use real cart data if available, otherwise use mock data for development
+  const items = cartItems.length > 0 ? cartItems : (isDev() ? mockCartItems : cartItems);
+  const total = cartItems.length > 0 ? cartTotal : (isDev() ? mockTotal : cartTotal);
+  
+  // Get authentication data from Redux
   const authState = useSelector((state: RootState) => state.auth);
   const isAuthenticatedFromRedux = authState.isAuthenticated;
   const userFromRedux = authState.user;
   
-  // Use real auth data if available, otherwise use mock data
+  // Use real auth data if available, otherwise use mock data for development
   // This approach ensures the component works in both production and development
-  const isAuthenticated = process.env.NODE_ENV === 'development' ? true : isAuthenticatedFromRedux;
-  const user = process.env.NODE_ENV === 'development' && !userFromRedux 
-    ? checkoutService.getMockUser() 
-    : userFromRedux;
+  const isAuthenticated = isDev() ? true : isAuthenticatedFromRedux;
+  const user = isDev() && !userFromRedux ? checkoutService.getMockUser() : userFromRedux;
   
   const [currentStep, setCurrentStep] = useState<CheckoutStep>('delivery');
   const [stepContainerRef] = useState(React.createRef<HTMLDivElement>());
@@ -46,7 +56,7 @@ const CheckoutPage: React.FC = () => {
     campus: '',
     building: '',
     roomNumber: '',
-    phoneNumber: user.phoneNumber || '',
+    phoneNumber: user && 'phoneNumber' in user ? user.phoneNumber : '',
     deliveryInstructions: '',
     deliveryTime: 'asap',
   });
@@ -198,10 +208,10 @@ const CheckoutPage: React.FC = () => {
           <OrderSummaryStep
             deliveryDetails={deliveryDetails}
             paymentDetails={paymentDetails}
-            cartItems={items}
+            cartItems={items as any}
             cartTotal={total}
             onBack={() => setCurrentStep('payment')}
-            onPlaceOrder={handleNextStep}
+            onPlaceOrder={handlePlaceOrder}
             isSubmitting={isSubmitting}
           />
         );

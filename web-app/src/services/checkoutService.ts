@@ -4,9 +4,19 @@ import { CartItem } from '../store/slices/cartSlice';
  * Configuration for API endpoints
  * This should be updated when the backend is ready
  */
+// Get environment variables safely with fallbacks
+const getEnvVariable = (key: string, fallback: string): string => {
+  try {
+    // @ts-ignore - Vite specific environment variables
+    return (import.meta.env?.[key] || fallback) as string;
+  } catch (e) {
+    return fallback;
+  }
+};
+
 const API_CONFIG = {
   // Base URL for API requests
-  BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:3001/api',
+  BASE_URL: getEnvVariable('VITE_API_URL', 'http://localhost:3001/api'),
   // Endpoints for different operations
   ENDPOINTS: {
     HEALTH: '/health',
@@ -101,8 +111,17 @@ async function fetchWithTimeout(url: string, options: RequestInit = {}) {
  * Utility to get the current environment
  */
 const getEnvironment = (): Environment => {
-  if (process.env.NODE_ENV === 'test') return 'test';
-  if (process.env.NODE_ENV === 'production') return 'production';
+  // Try to get environment using Vite's approach
+  try {
+    // @ts-ignore - Vite specific
+    const mode = import.meta.env?.MODE;
+    if (mode === 'test') return 'test';
+    if (mode === 'production') return 'production';
+  } catch (e) {
+    // Fallback to Node approach if Vite's approach fails
+    if (process.env.NODE_ENV === 'test') return 'test';
+    if (process.env.NODE_ENV === 'production') return 'production';
+  }
   return 'development';
 };
 
