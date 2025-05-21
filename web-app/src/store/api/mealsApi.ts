@@ -123,6 +123,59 @@ export const mealsApi = api.injectEndpoints({
         { type: 'Meal', id: 'LIST' },
       ],
     }),
+    
+    // Get related meals based on the current meal
+    getRelatedMeals: builder.query<Meal[], number>({
+      query: (mealId) => `/meals/${mealId}/related`,
+      // If the API endpoint doesn't exist yet, use a transformer to mock related data
+      transformResponse: (response: Meal[] | undefined, meta, arg) => {
+        // If the backend returns related meals, use that data
+        if (response && Array.isArray(response)) {
+          return response;
+        }
+        
+        // Otherwise, for development, return mock data
+        return [
+          {
+            id: 101,
+            name: 'Ndolé with Plantains',
+            description: 'Classic Cameroonian dish made with bitter leaves, peanuts, and served with ripe plantains.',
+            price: 3500,
+            imageUrl: '/meals/ndole.png',
+            category: 'Traditional',
+            isAvailable: true,
+            vendorId: 1,
+            vendor: { id: 1, name: 'Mama Africa Kitchen' }
+          },
+          {
+            id: 102,
+            name: 'Jollof Rice with Chicken',
+            description: 'Spicy rice dish cooked with tomatoes, peppers, and aromatic spices, served with grilled chicken.',
+            price: 3000,
+            imageUrl: '/meals/jollof-rice.png',
+            category: 'West African',
+            isAvailable: true,
+            vendorId: 1,
+            vendor: { id: 1, name: 'Mama Africa Kitchen' }
+          },
+          {
+            id: 103,
+            name: 'Koki Beans',
+            description: 'Steamed bean cake with palm oil and spices wrapped in banana leaves.',
+            price: 2500,
+            imageUrl: '/meals/koki-beans.png',
+            category: 'Traditional',
+            isAvailable: true,
+            vendorId: 2,
+            vendor: { id: 2, name: 'Campus Delights' }
+          }
+        ];
+      },
+      providesTags: (result) =>
+        result
+          ? [...result.map(({ id }) => ({ type: 'Meal' as const, id }))]
+          : [],
+    }),
   }),
   
   overrideExisting: false,
@@ -136,4 +189,5 @@ export const {
   useCreateMealMutation,
   useUpdateMealMutation,
   useDeleteMealMutation,
+  useGetRelatedMealsQuery,
 } = mealsApi;
