@@ -2,16 +2,16 @@ import { api } from './index';
 
 // Define types for meal requests and responses
 export interface Meal {
-  id: number;
+  id: number | string;
   name: string;
   description: string;
   price: number;
   imageUrl?: string;
   category?: string;
   isAvailable: boolean;
-  vendorId: number;
+  vendorId?: number;
   vendor?: {
-    id: number;
+    id?: number;
     name: string;
     logoUrl?: string;
   };
@@ -23,8 +23,10 @@ export interface Meal {
     carbs?: number;
     fat?: number;
   };
-  createdAt: string;
-  updatedAt: string;
+  rating?: number;
+  reviewCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface MealFilterParams {

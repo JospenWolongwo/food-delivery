@@ -33,6 +33,7 @@
 - [x] Implement responsive design with Tailwind CSS
 - [x] Implement API integration with Redux Toolkit Query
 - [x] Create authentication components (login, register, profile)
+- [x] Implement social authentication (Google, Facebook)
 - [ ] Complete all page components
 - [ ] Add form handling with React Hook Form and Zod
 - [ ] Implement data visualization with Recharts

@@ -21,8 +21,5 @@ export const api = createApi({
   endpoints: () => ({}),
 });
 
-// Import and export all API services
-export * from './authApi';
-export * from './mealsApi';
-export * from './ordersApi';
-export * from './vendorsApi';
+// DO NOT re-export all API services to avoid circular dependencies
+// These should be imported directly from their respective files

@@ -1,70 +1,53 @@
 version: "3.8"
 
 services:
-  # Backend services
-  api:
-    build:
-      context: ../server
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ../server:/app
-      - /app/node_modules
-    ports:
-      - "3000:3000"
-    depends_on:
-      - postgres
-      - redis
-    environment:
-      - NODE_ENV=development
-      - DATABASE_HOST=postgres
-      - DATABASE_PORT=5432
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=postgres
-      - DATABASE_NAME=food_delivery
-      - REDIS_URL=redis://redis:6379
-      - JWT_SECRET=dev_secret_key
-      - JWT_EXPIRES_IN=1h
-
   # Database
   postgres:
     image: postgres:14
+    container_name: food-delivery-postgres
+    restart: always
     ports:
-      - "5432:5432"
+      - "5434:5432"  # Changed port to avoid conflict
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=food_delivery
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ../docker/scripts/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+      # Only mount init script if it exists
+      # - ../docker/scripts/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
 
   # Cache
   redis:
     image: redis:alpine
+    container_name: food-delivery-redis
+    restart: always
     ports:
-      - "6379:6379"
+      - "6381:6379"  # Changed port to avoid conflict
     volumes:
       - redis-data:/data
-
-  # Web application
-  web:
-    build:
-      context: ../web-app
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ../web-app:/app
-      - /app/node_modules
-    ports:
-      - "5173:5173"
-    environment:
-      - VITE_API_URL=http://localhost:3000/api
 
   # Additional services for development
   mailhog:
     image: mailhog/mailhog
+    container_name: food-delivery-mailhog
     ports:
       - "8025:8025"
       - "1025:1025"
+      
+  # Database Management System
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: food-delivery-pgadmin
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@fooddelivery.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=80
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
 
 volumes:
   postgres-data:

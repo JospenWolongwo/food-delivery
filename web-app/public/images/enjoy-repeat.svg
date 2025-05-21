@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="150" cy="150" r="140" fill="#f3f4f6" />
+  
+  <!-- Plate -->
+  <circle cx="150" cy="150" r="80" fill="white" stroke="#6366f1" stroke-width="3" />
+  
+  <!-- Star -->
+  <path d="M150,70 L162,107 L200,107 L170,130 L180,167 L150,145 L120,167 L130,130 L100,107 L138,107 Z" fill="#facc15" />
+  
+  <!-- Simple plate content - just a colored arc -->
+  <path d="M110,170 Q150,200 190,170" stroke="#ef4444" stroke-width="3" fill="none" />
+  <path d="M190,170 Q185,150 170,150" stroke="#10b981" stroke-width="3" fill="none" />
+  
+  <!-- Simple fork illustration -->
+  <path d="M110,110 L130,130" stroke="#9ca3af" stroke-width="2" />
+  <path d="M190,110 L170,130" stroke="#9ca3af" stroke-width="2" />
+  
+  <!-- Repeat arrow -->
+  <path d="M150,230 L150,210" stroke="#6366f1" stroke-width="3" />
+  <path d="M130,220 L150,240 L170,220" stroke="#6366f1" stroke-width="3" fill="none" />
+</svg>

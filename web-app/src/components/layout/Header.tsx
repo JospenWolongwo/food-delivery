@@ -19,21 +19,21 @@ const Header = () => {
     // Header animation with GSAP
     const header = headerRef.current;
     if (header) {
-      gsap.from(header, {
-        y: -100,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out'
-      });
-
-      // Animate nav items separately for a staggered effect
-      gsap.from('.nav-item', {
-        opacity: 0,
-        y: -20,
-        stagger: 0.1,
-        duration: 0.5,
-        delay: 0.3
-      });
+      // Use a safer animation approach that doesn't interfere with styles
+      gsap.fromTo(header, 
+        { y: -20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }
+      );
+      
+      // Target more specific elements and don't animate position properties
+      // which can conflict with layout styles
+      const navLinks = header.querySelectorAll('a, button');
+      if (navLinks.length > 0) {
+        gsap.fromTo(navLinks, 
+          { opacity: 0 },
+          { opacity: 1, stagger: 0.05, duration: 0.3, delay: 0.2 }
+        );
+      }
     }
   }, []);
 
@@ -61,11 +61,11 @@ const Header = () => {
 
   return (
     <header ref={headerRef} className="bg-white shadow-md py-4 sticky top-0 z-30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-indigo-600">Campus Foods</span>
+            <span className="text-2xl font-bold text-indigo-600">Food Delivery</span>
           </Link>
           
           {/* Desktop Navigation */}
@@ -245,5 +245,6 @@ const Header = () => {
       </div>
     </header>
   );
+};
 
 export default Header;

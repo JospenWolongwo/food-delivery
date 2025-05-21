@@ -2,12 +2,16 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+# Copy package files and install dependencies
 COPY package*.json ./
 
+# Install dependencies inside the container
 RUN npm install
 
+# Copy the rest of the application code
 COPY . .
 
 EXPOSE 5173
 
-CMD ["npm", "run", "dev"]
+# Add host 0.0.0.0 to make it accessible outside the container
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

@@ -1,0 +1,28 @@
+<svg width="600" height="600" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="300" cy="300" r="280" fill="#f3f4f6" />
+  
+  <!-- Mobile phone outline -->
+  <rect x="200" y="100" width="200" height="400" rx="20" fill="white" stroke="#6366f1" stroke-width="8" />
+  
+  <!-- Screen elements -->
+  <rect x="220" y="130" width="160" height="40" rx="5" fill="#d1d5db" />
+  
+  <!-- Food items on screen -->
+  <rect x="220" y="190" width="160" height="60" rx="8" fill="#f9fafb" stroke="#d1d5db" stroke-width="2" />
+  <circle cx="250" cy="220" r="15" fill="#6366f1" />
+  <rect x="280" y="210" width="80" height="10" rx="2" fill="#d1d5db" />
+  <rect x="280" y="230" width="50" height="8" rx="2" fill="#d1d5db" />
+  
+  <rect x="220" y="270" width="160" height="60" rx="8" fill="#f9fafb" stroke="#d1d5db" stroke-width="2" />
+  <circle cx="250" cy="300" r="15" fill="#6366f1" />
+  <rect x="280" y="290" width="80" height="10" rx="2" fill="#d1d5db" />
+  <rect x="280" y="310" width="50" height="8" rx="2" fill="#d1d5db" />
+  
+  <!-- Order button -->
+  <rect x="250" y="350" width="100" height="40" rx="20" fill="#6366f1" />
+  <text x="300" y="375" font-family="Arial" font-size="20" text-anchor="middle" fill="white">ORDER</text>
+  
+  <!-- Home button -->
+  <circle cx="300" cy="420" r="15" fill="#e5e7eb" />
+</svg>

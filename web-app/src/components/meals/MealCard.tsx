@@ -15,21 +15,20 @@ const MealCard: React.FC<MealCardProps> = ({ meal, featured = false }) => {
   const dispatch = useDispatch();
   
   useEffect(() => {
-    // Animation on mount
+    // Animation on mount - only animate opacity to prevent style conflicts
     if (cardRef.current) {
       gsap.fromTo(
         cardRef.current,
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: 'power2.out' }
       );
     }
   }, []);
   
-  // Interactive animations on hover
+  // Interactive animations on hover - only animate boxShadow to prevent style conflicts
   const handleMouseEnter = () => {
     if (cardRef.current) {
       gsap.to(cardRef.current, {
-        y: -5,
         boxShadow: '0 12px 24px rgba(0, 0, 0, 0.15)',
         duration: 0.3,
         ease: 'power2.out'
@@ -40,8 +39,7 @@ const MealCard: React.FC<MealCardProps> = ({ meal, featured = false }) => {
   const handleMouseLeave = () => {
     if (cardRef.current) {
       gsap.to(cardRef.current, {
-        y: 0,
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
         duration: 0.3,
         ease: 'power2.out'
       });
@@ -73,16 +71,19 @@ const MealCard: React.FC<MealCardProps> = ({ meal, featured = false }) => {
   return (
     <div
       ref={cardRef}
-      className={`rounded-lg overflow-hidden shadow-md bg-white transition-all ${featured ? 'md:col-span-2 md:flex' : ''}`}
+      className={`rounded-lg overflow-hidden shadow-md bg-white transition-all h-full ${featured ? 'md:flex' : ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Link to={`/meals/${meal.id}`} className="block h-full">
-        <div className={`relative ${featured ? 'md:w-1/2' : ''}`}>
+      <Link to={`/meals/${meal.id}`} className="block h-full w-full">
+        <div className={`relative ${featured ? 'md:w-1/2 md:h-full' : 'w-full'}`}>
           <img
-            src={meal.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image'}
+            src={meal.imageUrl || '/images/meal-placeholder.svg'}
             alt={meal.name}
-            className="w-full h-48 object-cover"
+            className={`w-full h-48 object-cover ${featured ? 'md:h-full' : ''}`}
+            onError={(e) => {
+              e.currentTarget.src = '/images/meal-placeholder.svg';
+            }}
           />
           {meal.isAvailable ? (
             <span className="absolute top-2 right-2 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
@@ -104,7 +105,7 @@ const MealCard: React.FC<MealCardProps> = ({ meal, featured = false }) => {
           <div>
             <div className="flex justify-between items-start">
               <h3 className="text-lg font-semibold text-gray-900 mb-1">{meal.name}</h3>
-              <p className="text-lg font-bold text-indigo-600">${meal.price.toFixed(2)}</p>
+              <p className="text-lg font-bold text-indigo-600">{meal.price.toFixed(0)} FCFA</p>
             </div>
             
             <p className="text-sm text-gray-600 mb-3 line-clamp-2">{meal.description}</p>
@@ -112,9 +113,12 @@ const MealCard: React.FC<MealCardProps> = ({ meal, featured = false }) => {
             {meal.vendor && (
               <div className="flex items-center mb-3">
                 <img
-                  src={meal.vendor.logoUrl || 'https://via.placeholder.com/40?text=V'}
+                  src={meal.vendor.logoUrl || '/images/vendor-placeholder.svg'}
                   alt={meal.vendor.name}
-                  className="w-6 h-6 rounded-full mr-2"
+                  className="w-6 h-6 rounded-full mr-2 bg-indigo-100"
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/vendor-placeholder.svg';
+                  }}
                 />
                 <span className="text-xs text-gray-500">{meal.vendor.name}</span>
               </div>

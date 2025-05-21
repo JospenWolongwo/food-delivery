@@ -22,12 +22,20 @@ function App() {
       nullTargetWarn: false,
     });
     
-    // Global animations that should run on first load
+    // Add a small delay to ensure React has fully rendered components before applying animations
+    setTimeout(() => {
+      // Prevent GSAP from interfering with Tailwind styles
+      document.body.classList.add('gsap-loaded');
+    }, 50);
+    
+    // Global animations that should run on first load - but don't animate visibility
+    // or position properties which can conflict with Tailwind
+    // Using an empty timeline to avoid conflicts
     const tl = gsap.timeline();
-    tl.to('body', { duration: 0, css: { visibility: 'visible' } });
     
     return () => {
       // Clean up any global animations or listeners
+      document.body.classList.remove('gsap-loaded');
     };
   }, []);
 

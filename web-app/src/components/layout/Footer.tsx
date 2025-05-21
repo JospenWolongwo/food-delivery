@@ -10,27 +10,30 @@ const Footer = () => {
   const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    // Footer animation with GSAP and ScrollTrigger
+    // Footer animation with GSAP and ScrollTrigger - only animate opacity to prevent style conflicts
     const footer = footerRef.current;
     if (footer) {
-      gsap.from(footer, {
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: footer,
-          start: 'top bottom',
-          toggleActions: 'play none none none'
+      gsap.fromTo(footer, 
+        { opacity: 0 },
+        { 
+          opacity: 1, 
+          duration: 0.5, 
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: footer,
+            start: 'top bottom',
+            toggleActions: 'play none none none'
+          }
         }
-      });
+      );
     }
   }, []);
 
   return (
-    <footer ref={footerRef} className="bg-indigo-900 text-white py-10">
-      <div className="container-custom">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
+    <footer ref={footerRef} className="w-full bg-indigo-900 text-white py-10">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="w-full">
             <h3 className="text-xl font-bold mb-4">Campus Foods</h3>
             <p className="text-indigo-200 mb-4">
               Connecting university students with local food vendors through an efficient subscription-based meal delivery service.
@@ -54,9 +57,9 @@ const Footer = () => {
             </div>
           </div>
           
-          <div>
+          <div className="w-full">
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
+            <ul className="w-full space-y-2">
               <li><Link to="/" className="text-indigo-200 hover:text-white transition-colors">Home</Link></li>
               <li><Link to="/restaurants" className="text-indigo-200 hover:text-white transition-colors">Restaurants</Link></li>
               <li><Link to="/subscriptions" className="text-indigo-200 hover:text-white transition-colors">Meal Plans</Link></li>
@@ -65,9 +68,9 @@ const Footer = () => {
             </ul>
           </div>
           
-          <div>
+          <div className="w-full">
             <h3 className="text-lg font-semibold mb-4">Help & Support</h3>
-            <ul className="space-y-2">
+            <ul className="w-full space-y-2">
               <li><Link to="/faq" className="text-indigo-200 hover:text-white transition-colors">FAQ</Link></li>
               <li><Link to="/support" className="text-indigo-200 hover:text-white transition-colors">Support Center</Link></li>
               <li><Link to="/terms" className="text-indigo-200 hover:text-white transition-colors">Terms of Service</Link></li>
@@ -75,7 +78,7 @@ const Footer = () => {
             </ul>
           </div>
           
-          <div>
+          <div className="w-full">
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
             <p className="text-indigo-200 mb-2">Email: info@campusfoods.com</p>
             <p className="text-indigo-200 mb-2">Phone: +123 456 7890</p>
@@ -83,8 +86,8 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="border-t border-indigo-800 mt-8 pt-8 text-center text-indigo-200">
-          <p>&copy; {new Date().getFullYear()} Campus Food Delivery. All rights reserved.</p>
+        <div className="w-full border-t border-indigo-800 mt-8 pt-8 text-center text-indigo-200">
+          <p className="w-full">&copy; {new Date().getFullYear()} Campus Food Delivery. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="600" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="300" cy="300" r="280" fill="#f3f4f6" />
+  
+  <!-- Delivery box -->
+  <rect x="195" y="270" width="210" height="150" rx="15" fill="#f59e0b" stroke="#d97706" stroke-width="6" />
+  <rect x="195" y="270" width="210" height="45" rx="15" fill="#d97706" />
+  
+  <!-- Box lid flaps -->
+  <path d="M195,270 L240,225 L360,225 L405,270" fill="#f59e0b" stroke="#d97706" stroke-width="6" />
+  
+  <!-- Food container inside -->
+  <rect x="240" y="300" width="120" height="90" rx="9" fill="white" stroke="#e5e7eb" stroke-width="3" />
+  <path d="M240,330 L360,330" stroke="#e5e7eb" stroke-width="3" />
+  
+  <!-- House roof -->
+  <polygon points="180,210 300,120 420,210" fill="#6366f1" stroke="#4f46e5" stroke-width="6" />
+  
+  <!-- House front -->
+  <rect x="210" y="210" width="180" height="30" rx="3" fill="#c7d2fe" stroke="#6366f1" stroke-width="3" />
+  
+  <!-- Delivery person silhouette -->
+  <circle cx="120" cy="270" r="24" fill="#6366f1" />
+  <path d="M120,294 L120,330 M105,315 L135,315 M120,330 L105,360 M120,330 L135,360" stroke="#6366f1" stroke-width="6" stroke-linecap="round" />
+</svg>

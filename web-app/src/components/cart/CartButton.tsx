@@ -7,9 +7,13 @@ import gsap from 'gsap';
 const CartButton: React.FC = () => {
   const dispatch = useDispatch();
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const { items, total } = useSelector((state: RootState) => state.cart);
+  // Add fallback values to prevent crashes
+  const cartState = useSelector((state: any) => state.cart || { items: [], total: 0 });
   
-  const itemCount = items.reduce((count, item) => count + item.quantity, 0);
+  const items = cartState.items || [];
+  const total = cartState.total || 0;
+  
+  const itemCount = items.reduce((count, item) => count + (item.quantity || 0), 0);
   
   // Animation when item count changes
   useEffect(() => {
@@ -53,7 +57,7 @@ const CartButton: React.FC = () => {
       
       {total > 0 && (
         <span className="hidden md:inline-block ml-2 text-sm font-medium">
-          ${total.toFixed(2)}
+          {total.toFixed(0)} FCFA
         </span>
       )}
     </button>

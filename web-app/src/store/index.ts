@@ -4,13 +4,11 @@ import authReducer from './slices/authSlice';
 import cartReducer from './slices/cartSlice';
 import { api } from './api';
 
-// Import all API endpoints for type export
-import {
-  authApi,
-  mealsApi,
-  ordersApi,
-  vendorsApi,
-} from './api';
+// Import all API endpoints directly from their modules to avoid circular dependencies
+import { authApi } from './api/authApi';
+import { mealsApi } from './api/mealsApi';
+import { ordersApi } from './api/ordersApi';
+import { vendorsApi } from './api/vendorsApi';
 
 export const store = configureStore({
   reducer: {

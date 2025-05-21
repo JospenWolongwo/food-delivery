@@ -1,37 +1,158 @@
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { useGetMealsQuery } from '../../store/api/mealsApi';
-import MealCard from './MealCard';
-import gsap from 'gsap';
+import React, { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import MealCard from "./MealCard";
+import gsap from "gsap";
+
+// Mock data for featured Cameroonian meals
+const mockMeals = [
+  {
+    id: "1",
+    name: "Ndolé",
+    description:
+      "Traditional Cameroonian dish made with stewed nuts, ndolé leaves, and fish or beef.",
+    price: 3500,
+    imageUrl: "/meals/ndole.png",
+    isAvailable: true,
+    rating: 4.9,
+    reviewCount: 128,
+    category: "Traditional",
+    vendor: {
+      name: "Mama Africa",
+      logoUrl: "/images/vendor-placeholder.svg",
+    },
+    nutritionalInfo: {
+      calories: 580,
+    },
+  },
+  {
+    id: "2",
+    name: "Poulet DG",
+    description:
+      "Directeur Général chicken - a delicious dish with chicken, plantains, and vegetables in a rich sauce.",
+    price: 4200,
+    imageUrl: "/meals/grilled-chicken.png",
+    isAvailable: true,
+    rating: 4.8,
+    reviewCount: 95,
+    category: "Traditional",
+    vendor: {
+      name: "Chez Pierre",
+      logoUrl: "/images/vendor-placeholder.svg",
+    },
+    nutritionalInfo: {
+      calories: 650,
+    },
+  },
+  {
+    id: "3",
+    name: "Eru",
+    description:
+      "A nutritious vegetable soup made with finely shredded eru leaves, waterleaf, and meat or fish.",
+    price: 3000,
+    imageUrl: "/meals/eru.png",
+    isAvailable: true,
+    rating: 4.7,
+    reviewCount: 82,
+    category: "Traditional",
+    vendor: {
+      name: "Douala Kitchen",
+      logoUrl: "/images/vendor-placeholder.svg",
+    },
+    nutritionalInfo: {
+      calories: 450,
+    },
+  },
+  {
+    id: "4",
+    name: "Jollof Rice",
+    description:
+      "Spicy rice dish cooked with tomatoes, peppers, and aromatic spices, served with grilled chicken.",
+    price: 3200,
+    imageUrl: "/meals/jollof-rice.png",
+    isAvailable: true,
+    rating: 4.6,
+    reviewCount: 63,
+    category: "Rice",
+    vendor: {
+      name: "Yaoundé Express",
+      logoUrl: "/images/vendor-placeholder.svg",
+    },
+    nutritionalInfo: {
+      calories: 520,
+    },
+  },
+  {
+    id: "5",
+    name: "Mbongo Tchobi",
+    description:
+      "Traditional black soup made with a special spice blend and fish or meat, served with plantains or rice.",
+    price: 3800,
+    imageUrl: "/meals/mbongo-tchobi.png",
+    isAvailable: true,
+    rating: 4.5,
+    reviewCount: 54,
+    category: "Traditional",
+    vendor: {
+      name: "Bafoussam Delight",
+      logoUrl: "/images/vendor-placeholder.svg",
+    },
+    nutritionalInfo: {
+      calories: 490,
+    },
+  },
+  {
+    id: "6",
+    name: "Koki Beans",
+    description:
+      "Savory bean pudding made from black-eyed peas, wrapped in banana leaves and steamed to perfection.",
+    price: 2800,
+    imageUrl: "/meals/koki-beans.png",
+    isAvailable: true,
+    rating: 4.7,
+    reviewCount: 42,
+    category: "Traditional",
+    vendor: {
+      name: "Limbe Cuisine",
+      logoUrl: "/images/vendor-placeholder.svg",
+    },
+    nutritionalInfo: {
+      calories: 380,
+    },
+  },
+];
 
 const FeaturedMeals: React.FC = () => {
+  console.log("FeaturedMeals component rendering");
   const sectionRef = useRef<HTMLDivElement>(null);
-  
-  // Get top 5 meals, sorted by rating
-  const { data, isLoading, error } = useGetMealsQuery({
-    limit: 5,
-    sort: 'rating:desc',
-    isAvailable: true,
-  });
-  
-  // Animation on component mount
+
+  // Using mock data instead of API call
+  const data = { items: mockMeals };
+  console.log("Mock meals data:", mockMeals);
+  const isLoading = false;
+  const error = null;
+
+  // Animation on component mount - only animate opacity to prevent style conflicts
   useEffect(() => {
     if (sectionRef.current && !isLoading && data) {
       gsap.fromTo(
         sectionRef.current,
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }
+        { opacity: 0 },
+        { opacity: 1, duration: 0.5, ease: "power2.out" }
       );
     }
   }, [isLoading, data]);
-  
+
   if (isLoading) {
     return (
       <div className="py-12 md:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Featured Meals</h2>
-            <p className="mt-4 text-xl text-gray-500">Loading our top-rated meals...</p>
+            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+              Featured Meals
+            </h2>
+            <p className="mt-4 text-xl text-gray-500">
+              Loading our top-rated meals...
+            </p>
           </div>
           <div className="flex justify-center">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
@@ -40,17 +161,24 @@ const FeaturedMeals: React.FC = () => {
       </div>
     );
   }
-  
+
   if (error) {
     return (
       <div className="py-12 md:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Featured Meals</h2>
-            <p className="mt-4 text-xl text-gray-500">We're having trouble loading our featured meals right now.</p>
+            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+              Featured Meals
+            </h2>
+            <p className="mt-4 text-xl text-gray-500">
+              We're having trouble loading our featured meals right now.
+            </p>
           </div>
           <div className="text-center">
-            <Link to="/meals" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+            <Link
+              to="/meals"
+              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
+            >
               Browse All Meals
             </Link>
           </div>
@@ -58,17 +186,24 @@ const FeaturedMeals: React.FC = () => {
       </div>
     );
   }
-  
+
   if (!data || data.items.length === 0) {
     return (
       <div className="py-12 md:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Featured Meals</h2>
-            <p className="mt-4 text-xl text-gray-500">No meals available at the moment. Check back soon!</p>
+            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+              Featured Meals
+            </h2>
+            <p className="mt-4 text-xl text-gray-500">
+              No meals available at the moment. Check back soon!
+            </p>
           </div>
           <div className="text-center">
-            <Link to="/meals" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+            <Link
+              to="/meals"
+              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
+            >
               Browse All Meals
             </Link>
           </div>
@@ -76,48 +211,51 @@ const FeaturedMeals: React.FC = () => {
       </div>
     );
   }
-  
+
   return (
-    <div ref={sectionRef} className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <div
+      ref={sectionRef}
+      className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 bg-gray-50"
+    >
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Featured Meals</h2>
-          <p className="mt-4 text-xl text-gray-500">Discover our highest-rated and most popular meals</p>
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+            Featured Meals
+          </h2>
+          <p className="mt-4 text-xl text-gray-500">
+            Discover our highest-rated and most popular meals
+          </p>
         </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main featured meal - larger display */}
-          <div className="lg:col-span-2">
-            {data.items[0] && (
-              <MealCard meal={data.items[0]} featured={true} />
-            )}
-          </div>
-          
-          {/* Secondary featured meals */}
-          <div className="space-y-8">
-            {data.items.slice(1, 3).map((meal) => (
-              <MealCard key={meal.id} meal={meal} />
-            ))}
-          </div>
+
+        {/* Simple 3x2 grid layout */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Display all meals in a consistent 3x2 grid */}
+          {data.items.map((meal) => (
+            <div key={meal.id} className="h-full">
+              <MealCard meal={meal} featured={false} />
+            </div>
+          ))}
         </div>
-        
-        {/* Additional featured meals */}
-        {data.items.length > 3 && (
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {data.items.slice(3).map((meal) => (
-              <MealCard key={meal.id} meal={meal} />
-            ))}
-          </div>
-        )}
-        
-        <div className="mt-12 text-center">
-          <Link 
-            to="/meals" 
+
+        <div className="w-full mt-12 text-center">
+          <Link
+            to="/meals"
             className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
           >
             View All Meals
-            <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            <svg
+              className="ml-2 w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
             </svg>
           </Link>
         </div>
