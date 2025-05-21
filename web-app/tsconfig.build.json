@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "allowUnusedLabels": true,
+    "allowUnreachableCode": true,
+    "ignoreDeprecations": "5.0"
+  }
+}

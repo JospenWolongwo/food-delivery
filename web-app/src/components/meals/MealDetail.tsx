@@ -1,13 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useGetMealByIdQuery } from '../../store/api/mealsApi';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../store/slices/cartSlice';
 import gsap from 'gsap';
+import { Meal } from '../../types/meal';
 
-const MealDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const mealId = parseInt(id || '0');
+interface MealDetailProps {
+  meal: Meal | undefined;
+  isLoading: boolean;
+  error: any;
+}
+
+const MealDetail: React.FC<MealDetailProps> = ({ meal, isLoading, error }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
@@ -18,8 +22,6 @@ const MealDetail: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  
-  const { data: meal, isLoading, error } = useGetMealByIdQuery(mealId);
   
   useEffect(() => {
     // Animate components when meal data loads
@@ -334,7 +336,7 @@ const MealDetail: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                     {meal.isAvailable ? (
-                      <span>Add to Cart - ${(meal.price * quantity).toFixed(2)}</span>
+                      <span>Add to Cart - {(meal.price * quantity).toLocaleString()} FCFA</span>
                     ) : (
                       <span>Currently Unavailable</span>
                     )}
