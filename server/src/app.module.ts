@@ -9,6 +9,7 @@ import { VendorsModule } from './vendors/vendors.module';
 import { DeliveryModule } from './delivery/delivery.module';
 import { PaymentsModule } from './payments/payments.module';
 import { AuthModule } from './auth/auth.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -19,24 +20,39 @@ import { AuthModule } from './auth/auth.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        // Use environment variables with proper fallbacks
-        const host = process.env.DATABASE_HOST || configService.get('DATABASE_HOST', 'localhost');
-        const port = parseInt(process.env.DATABASE_PORT || '5434'); // Match the Docker port mapping
-        const username = process.env.DATABASE_USER || configService.get('DATABASE_USER', 'postgres');
-        const password = process.env.DATABASE_PASSWORD || configService.get('DATABASE_PASSWORD', 'postgres');
-        const database = process.env.DATABASE_NAME || configService.get('DATABASE_NAME', 'food_delivery');
+        // Check for DATABASE_URL first (used by Render and other cloud providers)
+        const databaseUrl = process.env.DATABASE_URL || configService.get('DATABASE_URL');
         
-        return {
-          type: 'postgres',
-          host,
-          port,
-          username,
-          password,
-          database,
-          entities: [__dirname + '/**/*.entity{.ts,.js}'],
-          synchronize: configService.get('NODE_ENV', 'development') !== 'production',
-          logging: configService.get('NODE_ENV', 'development') !== 'production'
-        };
+        if (databaseUrl) {
+          // If DATABASE_URL is provided, use it
+          return {
+            type: 'postgres',
+            url: databaseUrl,
+            entities: [__dirname + '/**/*.entity{.ts,.js}'],
+            synchronize: configService.get('NODE_ENV', 'development') !== 'production',
+            logging: configService.get('NODE_ENV', 'development') !== 'production',
+            ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+          };
+        } else {
+          // Otherwise use individual connection parameters
+          const host = process.env.DATABASE_HOST || configService.get('DATABASE_HOST', 'localhost');
+          const port = parseInt(process.env.DATABASE_PORT || configService.get('DATABASE_PORT', '5434')); // Match the Docker port mapping
+          const username = process.env.DATABASE_USER || configService.get('DATABASE_USER', 'postgres');
+          const password = process.env.DATABASE_PASSWORD || configService.get('DATABASE_PASSWORD', 'postgres');
+          const database = process.env.DATABASE_NAME || configService.get('DATABASE_NAME', 'food_delivery');
+          
+          return {
+            type: 'postgres',
+            host,
+            port,
+            username,
+            password,
+            database,
+            entities: [__dirname + '/**/*.entity{.ts,.js}'],
+            synchronize: configService.get('NODE_ENV', 'development') !== 'production',
+            logging: configService.get('NODE_ENV', 'development') !== 'production'
+          };
+        }
       },
     }),
     // Feature modules
@@ -48,6 +64,7 @@ import { AuthModule } from './auth/auth.module';
     DeliveryModule,
     PaymentsModule,
     AuthModule,
+    HealthModule,
   ],
 })
 export class AppModule {}

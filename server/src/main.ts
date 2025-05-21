@@ -29,7 +29,10 @@ async function bootstrap() {
   // Prefix all routes with /api
   app.setGlobalPrefix('api');
   
-  await app.listen(3000);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  // Use PORT from environment variables with fallback to 3000
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
+  console.log(`Application is running on port ${port}`);
+  console.log(`API documentation available at: /api/docs`);
 }
 bootstrap();
