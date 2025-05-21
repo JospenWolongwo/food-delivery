@@ -1,32 +1,14 @@
 import React from 'react';
+import { DeliveryDetails, PaymentDetails } from '../../services/checkoutService';
 
-interface DeliveryDetails {
-  address: string;
-  campus: string;
-  building: string;
-  roomNumber: string;
-  phoneNumber: string;
-  deliveryInstructions: string;
-  deliveryTime: string;
-}
-
-interface PaymentDetails {
-  method: 'credit-card' | 'mobile-money' | 'cash' | '';
-  cardNumber?: string;
-  expiryDate?: string;
-  cvv?: string;
-  cardholderName?: string;
-  mobileMoneyProvider?: string;
-  mobileMoneyNumber?: string;
-}
-
+// Define the CartItem interface for this component
 interface CartItem {
   mealId: number;
   name: string;
   price: number;
   quantity: number;
-  imageUrl: string;
-  vendorName: string;
+  imageUrl?: string; // Make imageUrl optional to be compatible with both types
+  vendorName?: string;
   specialInstructions?: string;
 }
 
