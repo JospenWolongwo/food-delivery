@@ -1,11 +1,10 @@
 services:
   - type: web
     name: food-delivery-api
-    env: node
+    env: docker
     region: frankfurt
     plan: free
-    buildCommand: npm install && npm run build
-    startCommand: npm run start:prod
+    dockerfilePath: ./Dockerfile.prod # This will use your production Dockerfile
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
