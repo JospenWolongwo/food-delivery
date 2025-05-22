@@ -63,7 +63,7 @@ const DeliveryDetailsStep: React.FC<DeliveryDetailsStepProps> = ({
                 value={deliveryDetails.campus}
                 onChange={handleChange}
                 className="appearance-none block w-full px-4 py-3 rounded-lg border border-gray-300 bg-white 
-                       text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 
+                       text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 
                        transition-all duration-200 shadow-sm"
                 required
               >
@@ -95,7 +95,7 @@ const DeliveryDetailsStep: React.FC<DeliveryDetailsStepProps> = ({
                 onChange={handleChange}
                 className={`appearance-none block w-full px-4 py-3 rounded-lg border 
                        ${!deliveryDetails.campus ? 'bg-gray-100 text-gray-500' : 'bg-white text-gray-800'} 
-                       border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 
+                       border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 
                        transition-all duration-200 shadow-sm`}
                 required
                 disabled={!deliveryDetails.campus}
@@ -150,7 +150,7 @@ const DeliveryDetailsStep: React.FC<DeliveryDetailsStepProps> = ({
               onChange={handleChange}
               placeholder="e.g. 101, B24, etc."
               className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm
-                     focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500
+                     focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500
                      placeholder-gray-400 transition-all duration-200"
               required
             />
@@ -169,7 +169,7 @@ const DeliveryDetailsStep: React.FC<DeliveryDetailsStepProps> = ({
               onChange={handleChange}
               placeholder="e.g. 2376XXXXXXXX"
               className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm
-                     focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500
+                     focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500
                      placeholder-gray-400 transition-all duration-200"
               required
             />
@@ -194,7 +194,7 @@ const DeliveryDetailsStep: React.FC<DeliveryDetailsStepProps> = ({
               placeholder="Any specific instructions for the delivery person? e.g. landmarks, directions, etc."
               rows={3}
               className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm
-                     focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500
+                     focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500
                      placeholder-gray-400 transition-all duration-200"
             />
           </div>
@@ -211,7 +211,7 @@ const DeliveryDetailsStep: React.FC<DeliveryDetailsStepProps> = ({
                 value={deliveryDetails.deliveryTime}
                 onChange={handleChange}
                 className="appearance-none block w-full px-4 py-3 rounded-lg border border-gray-300 bg-white 
-                       text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 
+                       text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 
                        transition-all duration-200 shadow-sm"
               >
                 <option value="asap">As soon as possible</option>
@@ -225,7 +225,7 @@ const DeliveryDetailsStep: React.FC<DeliveryDetailsStepProps> = ({
             </div>
             
             {deliveryDetails.deliveryTime === 'scheduled' && (
-              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-indigo-50 p-4 rounded-lg animate-fadeIn">
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-primary-50 p-4 rounded-lg animate-fadeIn">
                 <div>
                   <label htmlFor="deliveryDate" className="block text-sm font-semibold text-gray-700 mb-2">
                     Date
@@ -236,7 +236,7 @@ const DeliveryDetailsStep: React.FC<DeliveryDetailsStepProps> = ({
                     name="deliveryDate"
                     min={new Date().toISOString().split('T')[0]}
                     className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm
-                           focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500
+                           focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500
                            transition-all duration-200 bg-white"
                   />
                 </div>
@@ -249,8 +249,8 @@ const DeliveryDetailsStep: React.FC<DeliveryDetailsStepProps> = ({
                       id="deliveryTimeSlot"
                       name="deliveryTimeSlot"
                       className="appearance-none block w-full px-4 py-3 rounded-lg border border-gray-300 
-                             bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 
-                             focus:border-indigo-500 transition-all duration-200 shadow-sm"
+                             bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500/50 
+                             focus:border-primary-500 transition-all duration-200 shadow-sm"
                     >
                       <option value="morning">Morning (8 AM - 12 PM)</option>
                       <option value="afternoon">Afternoon (12 PM - 4 PM)</option>
@@ -277,7 +277,7 @@ const DeliveryDetailsStep: React.FC<DeliveryDetailsStepProps> = ({
               w-full py-4 rounded-lg font-semibold text-white text-base
               shadow-md transition-all duration-300 transform hover:translate-y-[-2px]
               ${isFormValid() 
-                ? 'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800' 
+                ? 'bg-primary-600 hover:bg-primary-700 active:bg-primary-800' 
                 : 'bg-gray-400 cursor-not-allowed'}
             `}
           >

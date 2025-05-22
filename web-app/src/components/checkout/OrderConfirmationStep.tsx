@@ -99,7 +99,7 @@ const OrderConfirmationStep: React.FC<OrderConfirmationStepProps> = ({
             <div className="relative pt-4">
               <div className="flex items-center justify-between">
                 <div className="flex flex-col items-center">
-                  <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-full bg-primary-600 flex items-center justify-center">
                     <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
@@ -132,7 +132,7 @@ const OrderConfirmationStep: React.FC<OrderConfirmationStepProps> = ({
                 </div>
               </div>
               <div className="absolute top-8 left-0 right-0 h-0.5 flex">
-                <div className="h-full bg-indigo-600 w-1/6"></div>
+                <div className="h-full bg-primary-600 w-1/6"></div>
                 <div className="h-full bg-gray-200 flex-1"></div>
               </div>
             </div>
@@ -145,7 +145,7 @@ const OrderConfirmationStep: React.FC<OrderConfirmationStepProps> = ({
         <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
           <button
             onClick={onContinueShopping}
-            className="flex-1 py-3 bg-indigo-600 text-white rounded-md font-medium hover:bg-indigo-700 transition-colors"
+            className="flex-1 py-3 bg-primary-600 text-white rounded-md font-medium hover:bg-primary-700 transition-colors"
           >
             Continue Shopping
           </button>
@@ -159,7 +159,7 @@ const OrderConfirmationStep: React.FC<OrderConfirmationStepProps> = ({
         
         <div className="mt-8 text-sm text-gray-500">
           <p>A confirmation has been sent to your email and phone.</p>
-          <p className="mt-1">Need help? Contact our <a href="/support" className="text-indigo-600 hover:text-indigo-700">support team</a>.</p>
+          <p className="mt-1">Need help? Contact our <a href="/support" className="text-primary-600 hover:text-primary-700">support team</a>.</p>
         </div>
       </div>
     </div>

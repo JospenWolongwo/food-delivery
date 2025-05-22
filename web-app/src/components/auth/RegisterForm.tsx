@@ -129,7 +129,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ redirectTo = '/' }) => {
           </h2>
           <p className="mt-2 text-sm text-center text-gray-600">
             Or{' '}
-            <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+            <Link to="/login" className="font-medium text-primary-600 hover:text-primary-500">
               sign in to your existing account
             </Link>
           </p>
@@ -153,7 +153,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ redirectTo = '/' }) => {
                   name="firstName"
                   type="text"
                   autoComplete="given-name"
-                  className={`relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ${
+                  className={`relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm ${
                     formErrors.firstName ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="First name"
@@ -174,7 +174,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ redirectTo = '/' }) => {
                   name="lastName"
                   type="text"
                   autoComplete="family-name"
-                  className={`relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ${
+                  className={`relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm ${
                     formErrors.lastName ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Last name"
@@ -196,7 +196,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ redirectTo = '/' }) => {
                 name="email"
                 type="email"
                 autoComplete="email"
-                className={`relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ${
+                className={`relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm ${
                   formErrors.email ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="Email address"
@@ -217,7 +217,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ redirectTo = '/' }) => {
                 name="password"
                 type="password"
                 autoComplete="new-password"
-                className={`relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ${
+                className={`relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm ${
                   formErrors.password ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="Password"
@@ -238,7 +238,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ redirectTo = '/' }) => {
                 name="confirmPassword"
                 type="password"
                 autoComplete="new-password"
-                className={`relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ${
+                className={`relative block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm ${
                   formErrors.confirmPassword ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="Confirm password"
@@ -254,7 +254,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ redirectTo = '/' }) => {
           <div>
             <button
               type="submit"
-              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md group hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -290,11 +290,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ redirectTo = '/' }) => {
           <div className="text-sm text-center">
             <p className="text-gray-600">
               By signing up, you agree to our{' '}
-              <Link to="/terms" className="font-medium text-indigo-600 hover:text-indigo-500">
+              <Link to="/terms" className="font-medium text-primary-600 hover:text-primary-500">
                 Terms of Service
               </Link>{' '}
               and{' '}
-              <Link to="/privacy" className="font-medium text-indigo-600 hover:text-indigo-500">
+              <Link to="/privacy" className="font-medium text-primary-600 hover:text-primary-500">
                 Privacy Policy
               </Link>
             </p>

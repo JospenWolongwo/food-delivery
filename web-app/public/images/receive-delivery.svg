@@ -15,12 +15,12 @@
   <path d="M240,330 L360,330" stroke="#e5e7eb" stroke-width="3" />
   
   <!-- House roof -->
-  <polygon points="180,210 300,120 420,210" fill="#6366f1" stroke="#4f46e5" stroke-width="6" />
+  <polygon points="180,210 300,120 420,210" fill="#f97316" stroke="#ea580c" stroke-width="6" />
   
   <!-- House front -->
-  <rect x="210" y="210" width="180" height="30" rx="3" fill="#c7d2fe" stroke="#6366f1" stroke-width="3" />
+  <rect x="210" y="210" width="180" height="30" rx="3" fill="#ffedd5" stroke="#f97316" stroke-width="3" />
   
   <!-- Delivery person silhouette -->
-  <circle cx="120" cy="270" r="24" fill="#6366f1" />
-  <path d="M120,294 L120,330 M105,315 L135,315 M120,330 L105,360 M120,330 L135,360" stroke="#6366f1" stroke-width="6" stroke-linecap="round" />
+  <circle cx="120" cy="270" r="24" fill="#f97316" />
+  <path d="M120,294 L120,330 M105,315 L135,315 M120,330 L105,360 M120,330 L135,360" stroke="#f97316" stroke-width="6" stroke-linecap="round" />
 </svg>

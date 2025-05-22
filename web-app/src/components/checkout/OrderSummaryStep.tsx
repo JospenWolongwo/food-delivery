@@ -223,7 +223,7 @@ const OrderSummaryStep: React.FC<OrderSummaryStepProps> = ({
             disabled={isSubmitting}
             className={`
               flex-1 py-3 rounded-md font-medium text-white
-              ${isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'}
+              ${isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary-600 hover:bg-primary-700'}
               transition-colors duration-200 flex items-center justify-center
             `}
           >

@@ -1,4 +1,4 @@
-import { CartItem } from '../store/slices/cartSlice';
+import { CartItem } from "../store/slices/cartSlice";
 
 /**
  * Configuration for API endpoints
@@ -16,22 +16,22 @@ const getEnvVariable = (key: string, fallback: string): string => {
 
 const API_CONFIG = {
   // Base URL for API requests
-  BASE_URL: getEnvVariable('VITE_API_URL', 'http://localhost:3001/api'),
+  BASE_URL: getEnvVariable("VITE_API_URL", "http://localhost:3001/api"),
   // Endpoints for different operations
   ENDPOINTS: {
-    HEALTH: '/health',
-    ORDERS: '/orders',
-    PAYMENT_VALIDATION: '/payments/validate',
-    PAYMENT_PROCESS: '/payments/process',
-    USER: '/users/me',
-    DELIVERY_ESTIMATE: '/delivery/estimate'
+    HEALTH: "/health",
+    ORDERS: "/orders",
+    PAYMENT_VALIDATION: "/payments/validate",
+    PAYMENT_PROCESS: "/payments/process",
+    USER: "/users/me",
+    DELIVERY_ESTIMATE: "/delivery/estimate",
   },
   // Timeout for API requests in milliseconds
-  TIMEOUT: 15000
+  TIMEOUT: 15000,
 };
 
 // Environments
-type Environment = 'development' | 'test' | 'production';
+type Environment = "development" | "test" | "production";
 
 // Types for checkout service
 export interface DeliveryDetails {
@@ -45,7 +45,7 @@ export interface DeliveryDetails {
 }
 
 export interface PaymentDetails {
-  method: 'credit-card' | 'mobile-money' | 'cash' | '';
+  method: "credit-card" | "mobile-money" | "cash" | "";
   cardNumber?: string;
   expiryDate?: string;
   cvv?: string;
@@ -82,24 +82,26 @@ export interface CheckoutData {
 async function fetchWithTimeout(url: string, options: RequestInit = {}) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), API_CONFIG.TIMEOUT);
-  
+
   try {
     const response = await fetch(url, {
       ...options,
-      signal: controller.signal
+      signal: controller.signal,
     });
-    
+
     clearTimeout(id);
-    
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Request failed with status ${response.status}`);
+      throw new Error(
+        errorData.message || `Request failed with status ${response.status}`
+      );
     }
-    
+
     return await response.json();
   } catch (error) {
-    if (error instanceof DOMException && error.name === 'AbortError') {
-      throw new Error('Request timeout');
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new Error("Request timeout");
     }
     throw error;
   } finally {
@@ -115,21 +117,21 @@ const getEnvironment = (): Environment => {
   try {
     // @ts-ignore - Vite specific
     const mode = import.meta.env?.MODE;
-    if (mode === 'test') return 'test';
-    if (mode === 'production') return 'production';
+    if (mode === "test") return "test";
+    if (mode === "production") return "production";
   } catch (e) {
     // Fallback to Node approach if Vite's approach fails
-    if (process.env.NODE_ENV === 'test') return 'test';
-    if (process.env.NODE_ENV === 'production') return 'production';
+    if (process.env.NODE_ENV === "test") return "test";
+    if (process.env.NODE_ENV === "production") return "production";
   }
-  return 'development';
+  return "development";
 };
 
 /**
  * Utility to check if the app is running in a development environment
  */
 const isDevelopment = (): boolean => {
-  return getEnvironment() === 'development';
+  return getEnvironment() === "development";
 };
 
 /**
@@ -138,15 +140,18 @@ const isDevelopment = (): boolean => {
  */
 const isBackendAvailable = async (): Promise<boolean> => {
   try {
-    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.HEALTH}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      // Short timeout for health check
-      signal: AbortSignal.timeout(3000)
-    });
+    const response = await fetch(
+      `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.HEALTH}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        // Short timeout for health check
+        signal: AbortSignal.timeout(3000),
+      }
+    );
     return response.ok;
   } catch (error) {
-    console.warn('Backend health check failed:', error);
+    console.warn("Backend health check failed:", error);
     return false;
   }
 };
@@ -160,7 +165,7 @@ class CheckoutService {
    * Place an order with the provided checkout data
    * @param checkoutData - The complete checkout data including delivery, payment and items
    * @returns Promise with the order response
-   * 
+   *
    * Backend API: POST /api/orders
    * Request body: CheckoutData
    * Response: OrderResponse
@@ -168,118 +173,132 @@ class CheckoutService {
   async placeOrder(checkoutData: CheckoutData): Promise<OrderResponse> {
     // Check if we should use mock data
     const useMockData = isDevelopment() && !(await isBackendAvailable());
-    
+
     if (useMockData) {
-      console.info('[Checkout Service] Using mock data for order placement');
+      console.info("[Checkout Service] Using mock data for order placement");
       // Simulate API call with timeout
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Return mock order response
       return {
         success: true,
         orderNumber: `ORD-${Math.floor(100000 + Math.random() * 900000)}`,
         estimatedDelivery: {
           minMinutes: 30,
-          maxMinutes: 45
+          maxMinutes: 45,
         },
-        transactionId: `TXN-${Date.now()}`
+        transactionId: `TXN-${Date.now()}`,
       };
     } else {
       // Real API implementation
       try {
-        console.info('[Checkout Service] Placing order with backend API');
+        console.info("[Checkout Service] Placing order with backend API");
         // Real API call
-        const data = await fetchWithTimeout(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ORDERS}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(checkoutData)
-        });
-        
+        const data = await fetchWithTimeout(
+          `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ORDERS}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(checkoutData),
+          }
+        );
+
         return {
           success: true,
           orderNumber: data.orderNumber,
           estimatedDelivery: data.estimatedDelivery,
-          transactionId: data.transactionId
+          transactionId: data.transactionId,
         };
       } catch (error) {
-        console.error('[Checkout Service] Order placement failed:', error);
+        console.error("[Checkout Service] Order placement failed:", error);
         // For now, return mock data until backend is ready
         if (isDevelopment()) {
-          console.info('[Checkout Service] Falling back to mock data due to API error');
-          await new Promise(resolve => setTimeout(resolve, 1500));
+          console.info(
+            "[Checkout Service] Falling back to mock data due to API error"
+          );
+          await new Promise((resolve) => setTimeout(resolve, 1500));
           return {
             success: true,
             orderNumber: `ORD-${Math.floor(100000 + Math.random() * 900000)}`,
             estimatedDelivery: {
               minMinutes: 30,
-              maxMinutes: 45
+              maxMinutes: 45,
             },
-            transactionId: `TXN-${Date.now()}`
+            transactionId: `TXN-${Date.now()}`,
           };
         }
-        
+
         return {
           success: false,
-          orderNumber: '',
+          orderNumber: "",
           estimatedDelivery: {
             minMinutes: 0,
-            maxMinutes: 0
+            maxMinutes: 0,
           },
-          error: error instanceof Error ? error.message : 'An unknown error occurred'
+          error:
+            error instanceof Error
+              ? error.message
+              : "An unknown error occurred",
         };
       }
     }
   }
-  
+
   /**
    * Validate payment details with payment processor
    * @param paymentDetails - The payment details to validate
    * @returns Promise with validation result
-   * 
+   *
    * Backend API: POST /api/payments/validate
    * Request body: PaymentDetails
    * Response: { valid: boolean, message?: string }
    */
-  async validatePayment(paymentDetails: PaymentDetails): Promise<{ valid: boolean; message?: string }> {
+  async validatePayment(
+    paymentDetails: PaymentDetails
+  ): Promise<{ valid: boolean; message?: string }> {
     // For development, always return valid payment
     if (isDevelopment() && !(await isBackendAvailable())) {
-      console.info('[Checkout Service] Using mock data for payment validation');
-      await new Promise(resolve => setTimeout(resolve, 800));
+      console.info("[Checkout Service] Using mock data for payment validation");
+      await new Promise((resolve) => setTimeout(resolve, 800));
       return { valid: true };
     }
-    
+
     // In production, this would connect to a payment processor
     try {
-      console.info('[Checkout Service] Validating payment with backend API');
-      const data = await fetchWithTimeout(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PAYMENT_VALIDATION}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(paymentDetails)
-      });
-      
-      return { 
-        valid: data.valid, 
-        message: data.message 
+      console.info("[Checkout Service] Validating payment with backend API");
+      const data = await fetchWithTimeout(
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PAYMENT_VALIDATION}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(paymentDetails),
+        }
+      );
+
+      return {
+        valid: data.valid,
+        message: data.message,
       };
     } catch (error) {
-      console.error('[Checkout Service] Payment validation failed:', error);
+      console.error("[Checkout Service] Payment validation failed:", error);
       // For development fallback
       if (isDevelopment()) {
         return { valid: true };
       }
-      
-      return { 
-        valid: false, 
-        message: error instanceof Error ? error.message : 'Payment validation failed'
+
+      return {
+        valid: false,
+        message:
+          error instanceof Error ? error.message : "Payment validation failed",
       };
     }
   }
-  
+
   /**
    * Get estimated delivery time based on delivery details
    * @param deliveryDetails - The delivery details to use for estimation
    * @returns Promise with estimated delivery time
-   * 
+   *
    * Backend API: POST /api/delivery/estimate
    * Request body: DeliveryDetails
    * Response: { minMinutes: number, maxMinutes: number }
@@ -289,36 +308,44 @@ class CheckoutService {
     maxMinutes: number;
   }> {
     if (isDevelopment() && !(await isBackendAvailable())) {
-      console.info('[Checkout Service] Using mock data for delivery estimate');
-      await new Promise(resolve => setTimeout(resolve, 500));
+      console.info("[Checkout Service] Using mock data for delivery estimate");
+      await new Promise((resolve) => setTimeout(resolve, 500));
       return {
         minMinutes: 30,
-        maxMinutes: 45
+        maxMinutes: 45,
       };
     }
-    
+
     try {
-      console.info('[Checkout Service] Getting delivery estimate from backend API');
-      const data = await fetchWithTimeout(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.DELIVERY_ESTIMATE}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(deliveryDetails)
-      });
-      
+      console.info(
+        "[Checkout Service] Getting delivery estimate from backend API"
+      );
+      const data = await fetchWithTimeout(
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.DELIVERY_ESTIMATE}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(deliveryDetails),
+        }
+      );
+
       return {
         minMinutes: data.minMinutes,
-        maxMinutes: data.maxMinutes
+        maxMinutes: data.maxMinutes,
       };
     } catch (error) {
-      console.error('[Checkout Service] Failed to get delivery estimate:', error);
+      console.error(
+        "[Checkout Service] Failed to get delivery estimate:",
+        error
+      );
       // Default fallback
       return {
         minMinutes: 30,
-        maxMinutes: 45
+        maxMinutes: 45,
       };
     }
   }
-  
+
   /**
    * Get mock data for testing and development
    */
@@ -326,33 +353,33 @@ class CheckoutService {
     return [
       {
         mealId: 1,
-        name: 'Ndolé with Plantains',
+        name: "Ndolé with Plantains",
         price: 3500,
         quantity: 2,
-        imageUrl: '/meals/ndole.png',
-        vendorName: 'Mama Africa Kitchen',
-        specialInstructions: 'Extra spicy please'
+        imageUrl: "/meals/ndole.jpg",
+        vendorName: "Mama Africa Kitchen",
+        specialInstructions: "Extra spicy please",
       },
       {
         mealId: 2,
-        name: 'Jollof Rice with Chicken',
+        name: "Jollof Rice with Chicken",
         price: 3000,
         quantity: 1,
-        imageUrl: '/meals/jollof-rice.png',
-        vendorName: 'Mama Africa Kitchen'
-      }
+        imageUrl: "/meals/jollof-rice.jpg",
+        vendorName: "Mama Africa Kitchen",
+      },
     ];
   }
-  
+
   /**
    * Get mock user data for testing and development
    */
   getMockUser() {
     return {
       id: 1,
-      name: 'Test User',
-      email: 'test@example.com',
-      phoneNumber: '237612345678'
+      name: "Test User",
+      email: "test@example.com",
+      phoneNumber: "237612345678",
     };
   }
 }

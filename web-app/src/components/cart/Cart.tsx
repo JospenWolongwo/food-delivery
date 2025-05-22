@@ -133,11 +133,11 @@ const Cart: React.FC = () => {
       >
         <div className="flex flex-col h-full max-h-screen overflow-hidden">
           {/* Cart Header */}
-          <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-indigo-600 text-white">
+          <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-orange-600 text-white">
             <h2 className="text-xl font-semibold">Your Cart</h2>
             <button
               onClick={() => dispatch(closeCart())}
-              className="text-white p-1 rounded-full hover:bg-indigo-700 transition-colors"
+              className="text-white p-1 rounded-full hover:bg-primary-700 transition-colors"
             >
               <svg
                 className="w-6 h-6"
@@ -181,7 +181,7 @@ const Cart: React.FC = () => {
                     dispatch(closeCart());
                     navigate('/meals');
                   }}
-                  className="mt-6 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+                  className="mt-6 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
                 >
                   Browse Meals
                 </button>
@@ -326,7 +326,7 @@ const Cart: React.FC = () => {
               
               <button
                 onClick={handleCheckout}
-                className="w-full py-3 bg-indigo-600 text-white rounded-md font-medium hover:bg-indigo-700 transition-colors"
+                className="w-full py-3 bg-orange-600 text-white rounded-md font-medium hover:bg-orange-700 transition-colors"
               >
                 Proceed to Checkout
               </button>
@@ -336,7 +336,7 @@ const Cart: React.FC = () => {
                   dispatch(closeCart());
                   navigate('/meals');
                 }}
-                className="w-full mt-2 py-2 text-indigo-600 rounded-md font-medium hover:bg-indigo-50 transition-colors"
+                className="w-full mt-2 py-2 text-orange-600 rounded-md font-medium hover:bg-orange-50 transition-colors"
               >
                 Continue Shopping
               </button>

@@ -210,7 +210,7 @@ const FeaturedMeals: React.FC = () => {
             </p>
           </div>
           <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
           </div>
         </div>
       </div>
@@ -232,7 +232,7 @@ const FeaturedMeals: React.FC = () => {
           <div className="text-center">
             <Link
               to="/meals"
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
+              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700"
             >
               Browse All Meals
             </Link>
@@ -257,7 +257,7 @@ const FeaturedMeals: React.FC = () => {
           <div className="text-center">
             <Link
               to="/meals"
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
+              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700"
             >
               Browse All Meals
             </Link>
@@ -295,7 +295,7 @@ const FeaturedMeals: React.FC = () => {
         <div className="w-full mt-12 text-center">
           <Link
             to="/meals"
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 transition-colors"
           >
             View All Meals
             <svg

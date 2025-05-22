@@ -95,7 +95,7 @@ const MealCard: React.FC<MealCardProps> = ({ meal, featured = false }) => {
             </span>
           )}
           {featured && (
-            <span className="absolute top-2 left-2 bg-indigo-600 text-white text-xs font-semibold px-2 py-1 rounded">
+            <span className="absolute top-2 left-2 bg-primary-600 text-white text-xs font-semibold px-2 py-1 rounded">
               Featured
             </span>
           )}
@@ -105,7 +105,7 @@ const MealCard: React.FC<MealCardProps> = ({ meal, featured = false }) => {
           <div>
             <div className="flex justify-between items-start">
               <h3 className="text-lg font-semibold text-gray-900 mb-1">{meal.name}</h3>
-              <p className="text-lg font-bold text-indigo-600">{meal.price.toFixed(0)} FCFA</p>
+              <p className="text-lg font-bold text-primary-600">{meal.price.toFixed(0)} FCFA</p>
             </div>
             
             <p className="text-sm text-gray-600 mb-3 line-clamp-2">{meal.description}</p>
@@ -115,7 +115,7 @@ const MealCard: React.FC<MealCardProps> = ({ meal, featured = false }) => {
                 <img
                   src={meal.vendor.logoUrl || '/images/vendor-placeholder.svg'}
                   alt={meal.vendor.name}
-                  className="w-6 h-6 rounded-full mr-2 bg-indigo-100"
+                  className="w-6 h-6 rounded-full mr-2 bg-primary-100"
                   onError={(e) => {
                     e.currentTarget.src = '/images/vendor-placeholder.svg';
                   }}
@@ -149,7 +149,7 @@ const MealCard: React.FC<MealCardProps> = ({ meal, featured = false }) => {
             
             <button
               onClick={handleAddToCart}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2 px-4 rounded-md transition-colors"
+              className="bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium py-2 px-4 rounded-md transition-colors"
             >
               Add to Cart
             </button>

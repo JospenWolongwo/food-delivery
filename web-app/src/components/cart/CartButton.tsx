@@ -31,7 +31,7 @@ const CartButton: React.FC = () => {
     <button
       ref={buttonRef}
       onClick={() => dispatch(toggleCart())}
-      className="relative p-2 text-indigo-600 hover:text-indigo-800 transition-colors"
+      className="relative p-2 text-orange-600 hover:text-orange-800 transition-colors"
       aria-label="Open cart"
     >
       <svg 

@@ -35,7 +35,7 @@ const UserProfile: React.FC = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="p-4 text-center">
           <svg
-            className="w-12 h-12 mx-auto text-indigo-600 animate-spin"
+            className="w-12 h-12 mx-auto text-primary-600 animate-spin"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -85,7 +85,7 @@ const UserProfile: React.FC = () => {
       <div className="p-8 bg-white rounded-lg shadow-lg profile-card">
         <div className="flex items-center justify-between mb-6 profile-section">
           <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
-          <button className="px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          <button className="px-4 py-2 text-white bg-primary-600 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
             Edit Profile
           </button>
         </div>
@@ -132,7 +132,7 @@ const UserProfile: React.FC = () => {
                   <p className="text-sm font-medium text-gray-500">Password</p>
                   <p className="text-lg text-gray-800">••••••••</p>
                 </div>
-                <button className="px-3 py-1 text-sm text-indigo-600 border border-indigo-600 rounded-md hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <button className="px-3 py-1 text-sm text-primary-600 border border-primary-600 rounded-md hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                   Change
                 </button>
               </div>
@@ -140,7 +140,7 @@ const UserProfile: React.FC = () => {
                 <p className="text-sm font-medium text-gray-500">Two-Factor Authentication</p>
                 <p className="text-lg text-gray-800">Not enabled</p>
               </div>
-              <button className="w-full px-4 py-2 mt-4 text-indigo-600 border border-indigo-600 rounded-md hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <button className="w-full px-4 py-2 mt-4 text-primary-600 border border-primary-600 rounded-md hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                 Enable Two-Factor Authentication
               </button>
             </div>

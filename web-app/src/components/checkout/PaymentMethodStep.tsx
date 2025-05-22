@@ -128,14 +128,14 @@ const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
             className={`
               border-2 rounded-lg p-5 cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md
               ${paymentDetails.method === 'credit-card' 
-                ? 'border-indigo-500 bg-indigo-50/70 shadow-md' 
-                : 'border-gray-200 hover:border-indigo-200'}
+                ? 'border-primary-500 bg-primary-50/70 shadow-md' 
+                : 'border-gray-200 hover:border-primary-200'}
             `}
             onClick={() => handleMethodChange('credit-card')}
           >
             <div className="flex items-center">
               <div className="bg-white p-2 rounded-md shadow-sm mr-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                 </svg>
               </div>
@@ -145,7 +145,7 @@ const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
                 name="paymentMethod"
                 checked={paymentDetails.method === 'credit-card'}
                 onChange={() => handleMethodChange('credit-card')}
-                className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                className="h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300"
               />
               <label htmlFor="credit-card" className="ml-3 cursor-pointer">
                 <span className="font-semibold text-gray-900">Credit Card</span>
@@ -167,7 +167,7 @@ const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
                     placeholder="0000 0000 0000 0000"
                     maxLength={19}
                     className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm
-                           focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500
+                           focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500
                            placeholder-gray-400 transition-all duration-200"
                     required
                   />
@@ -186,7 +186,7 @@ const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
                       placeholder="MM/YY"
                       maxLength={5}
                       className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm
-                             focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500
+                             focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500
                              placeholder-gray-400 transition-all duration-200"
                       required
                     />
@@ -204,7 +204,7 @@ const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
                       placeholder="123"
                       maxLength={4}
                       className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm
-                             focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500
+                             focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500
                              placeholder-gray-400 transition-all duration-200"
                       required
                     />
@@ -223,7 +223,7 @@ const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
                     onChange={handleChange}
                     placeholder="John Doe"
                     className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm
-                           focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500
+                           focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500
                            placeholder-gray-400 transition-all duration-200"
                     required
                   />
@@ -237,14 +237,14 @@ const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
             className={`
               border-2 rounded-lg p-5 cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md
               ${paymentDetails.method === 'mobile-money' 
-                ? 'border-indigo-500 bg-indigo-50/70 shadow-md' 
-                : 'border-gray-200 hover:border-indigo-200'}
+                ? 'border-primary-500 bg-primary-50/70 shadow-md' 
+                : 'border-gray-200 hover:border-primary-200'}
             `}
             onClick={() => handleMethodChange('mobile-money')}
           >
             <div className="flex items-center">
               <div className="bg-white p-2 rounded-md shadow-sm mr-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
               </div>
@@ -254,7 +254,7 @@ const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
                 name="paymentMethod"
                 checked={paymentDetails.method === 'mobile-money'}
                 onChange={() => handleMethodChange('mobile-money')}
-                className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                className="h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300"
               />
               <label htmlFor="mobile-money" className="ml-3 cursor-pointer">
                 <span className="font-semibold text-gray-900">Mobile Money</span>
@@ -275,7 +275,7 @@ const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
                       value={paymentDetails.mobileMoneyProvider || ''}
                       onChange={handleChange}
                       className="appearance-none block w-full px-4 py-3 rounded-lg border border-gray-300 bg-white 
-                             text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 
+                             text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 
                              transition-all duration-200 shadow-sm"
                       required
                     >
@@ -304,7 +304,7 @@ const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
                     onChange={handleChange}
                     placeholder="e.g. 237XXXXXXXXX"
                     className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm
-                           focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500
+                           focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500
                            placeholder-gray-400 transition-all duration-200"
                     required
                   />
@@ -318,14 +318,14 @@ const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
             className={`
               border-2 rounded-lg p-5 cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md
               ${paymentDetails.method === 'cash' 
-                ? 'border-indigo-500 bg-indigo-50/70 shadow-md' 
-                : 'border-gray-200 hover:border-indigo-200'}
+                ? 'border-primary-500 bg-primary-50/70 shadow-md' 
+                : 'border-gray-200 hover:border-primary-200'}
             `}
             onClick={() => handleMethodChange('cash')}
           >
             <div className="flex items-center">
               <div className="bg-white p-2 rounded-md shadow-sm mr-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
                 </svg>
               </div>
@@ -335,7 +335,7 @@ const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
                 name="paymentMethod"
                 checked={paymentDetails.method === 'cash'}
                 onChange={() => handleMethodChange('cash')}
-                className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                className="h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300"
               />
               <label htmlFor="cash" className="ml-3 cursor-pointer">
                 <span className="font-semibold text-gray-900">Cash on Delivery</span>
@@ -354,7 +354,7 @@ const PaymentMethodStep: React.FC<PaymentMethodStepProps> = ({
               sm:flex-1 py-4 rounded-lg font-semibold text-white text-base
               shadow-md transition-all duration-300 transform hover:translate-y-[-2px]
               ${isFormValid() 
-                ? 'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800' 
+                ? 'bg-primary-600 hover:bg-primary-700 active:bg-primary-800' 
                 : 'bg-gray-400 cursor-not-allowed'}
             `}
           >

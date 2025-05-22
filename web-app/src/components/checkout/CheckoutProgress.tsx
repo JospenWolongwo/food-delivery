@@ -48,11 +48,11 @@ const CheckoutProgress: React.FC<CheckoutProgressProps> = ({
                       w-10 h-10 rounded-full text-sm font-bold
                       shadow-sm transition-all duration-300
                       ${isComplete 
-                        ? 'bg-indigo-600 text-white scale-105 shadow-indigo-200' 
+                        ? 'bg-primary-600 text-white scale-105 shadow-primary-200' 
                         : isActive 
-                          ? 'border-2 border-indigo-600 text-indigo-600 bg-indigo-50 scale-110 shadow-md' 
+                          ? 'border-2 border-primary-600 text-primary-600 bg-primary-50 scale-110 shadow-md' 
                           : 'border-2 border-gray-300 text-gray-500 bg-white'}
-                      ${isClickable && !isActive && !isComplete ? 'hover:border-indigo-400 hover:text-indigo-500 hover:bg-indigo-50 cursor-pointer' : ''}
+                      ${isClickable && !isActive && !isComplete ? 'hover:border-primary-400 hover:text-primary-500 hover:bg-primary-50 cursor-pointer' : ''}
                       ${!isClickable && !isActive && !isComplete ? 'opacity-70 cursor-not-allowed' : ''}
                     `}
                     aria-current={isActive ? 'step' : undefined}
@@ -72,7 +72,7 @@ const CheckoutProgress: React.FC<CheckoutProgressProps> = ({
                       <div 
                         className={`
                           absolute top-5 h-1 rounded-full w-full
-                          ${index < currentStepIndex ? 'bg-indigo-600' : 'bg-gray-200'}
+                          ${index < currentStepIndex ? 'bg-primary-600' : 'bg-gray-200'}
                           transition-colors duration-500
                         `}
                       />
@@ -87,8 +87,8 @@ const CheckoutProgress: React.FC<CheckoutProgressProps> = ({
                     disabled={!isClickable}
                     className={`
                       text-sm font-medium whitespace-nowrap
-                      ${isActive ? 'text-indigo-800 font-semibold' : isComplete ? 'text-gray-900' : 'text-gray-500'}
-                      ${isClickable && !isActive ? 'hover:text-indigo-700 cursor-pointer' : ''}
+                      ${isActive ? 'text-primary-800 font-semibold' : isComplete ? 'text-gray-900' : 'text-gray-500'}
+                      ${isClickable && !isActive ? 'hover:text-primary-700 cursor-pointer' : ''}
                       ${!isClickable && !isActive ? 'opacity-70 cursor-not-allowed' : ''}
                       transition-all duration-300
                       ${isActive ? 'scale-105' : ''}

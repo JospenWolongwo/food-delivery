@@ -229,7 +229,7 @@ const CheckoutPage: React.FC = () => {
     <div className="bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen pt-16 pb-24">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-8">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-700 to-indigo-500">Checkout</span>
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-700 to-primary-500">Checkout</span>
         </h1>
         
         {currentStep !== 'confirmation' && (
@@ -257,7 +257,7 @@ const CheckoutPage: React.FC = () => {
         {currentStep !== 'confirmation' && (
           <div className="mt-8 p-4 bg-white rounded-xl shadow-md flex justify-center space-x-4 transition-all duration-300 hover:shadow-lg">
             <div className="text-sm text-gray-600">
-              <span className="font-medium">Need help?</span> Contact support at <span className="text-indigo-600">support@campusfood.com</span>
+              <span className="font-medium">Need help?</span> Contact support at <span className="text-primary-600">support@campusfood.com</span>
             </div>
           </div>
         )}

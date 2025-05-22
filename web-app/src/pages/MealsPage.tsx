@@ -77,7 +77,7 @@ const MealsPage: React.FC = () => {
               <input
                 type="text"
                 placeholder="Search for meals..."
-                className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-l-md focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-l-md focus:ring-primary-500 focus:border-primary-500"
                 value={searchQuery}
                 onChange={handleSearchChange}
               />
@@ -89,7 +89,7 @@ const MealsPage: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="px-6 py-3 bg-indigo-600 text-white font-medium rounded-r-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="px-6 py-3 bg-primary-600 text-white font-medium rounded-r-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
               Search
             </button>
@@ -103,7 +103,7 @@ const MealsPage: React.FC = () => {
               <button
                 key={cat.id}
                 onClick={() => handleCategoryChange(cat.id === 'all' ? undefined : cat.id)}
-                className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${cat.id === 'all' && !category || cat.id === category ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${cat.id === 'all' && !category || cat.id === category ? 'bg-primary-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
               >
                 {cat.name}
               </button>

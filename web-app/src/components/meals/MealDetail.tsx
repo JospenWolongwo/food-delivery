@@ -71,7 +71,7 @@ const MealDetail: React.FC<MealDetailProps> = ({ meal, isLoading, error }) => {
       
       // Provide visual feedback
       gsap.to('.add-to-cart-btn', {
-        backgroundColor: '#4F46E5', // Indigo-700
+        backgroundColor: '#EA580C', // Primary-700
         scale: 1.05,
         duration: 0.2,
         yoyo: true,
@@ -156,7 +156,7 @@ const MealDetail: React.FC<MealDetailProps> = ({ meal, isLoading, error }) => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
       </div>
     );
   }
@@ -169,7 +169,7 @@ const MealDetail: React.FC<MealDetailProps> = ({ meal, isLoading, error }) => {
           <p>We couldn't find the meal you're looking for. It may have been removed or is temporarily unavailable.</p>
           <button 
             onClick={() => navigate(-1)}
-            className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+            className="mt-4 px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors"
           >
             Go Back
           </button>
@@ -205,7 +205,7 @@ const MealDetail: React.FC<MealDetailProps> = ({ meal, isLoading, error }) => {
                 </span>
               )}
               {meal.category && (
-                <span className="absolute top-4 left-4 bg-indigo-600 text-white text-sm font-semibold px-3 py-1 rounded-full">
+                <span className="absolute top-4 left-4 bg-primary-600 text-white text-sm font-semibold px-3 py-1 rounded-full">
                   {meal.category}
                 </span>
               )}
@@ -223,7 +223,7 @@ const MealDetail: React.FC<MealDetailProps> = ({ meal, isLoading, error }) => {
                     className="w-8 h-8 rounded-full mr-2"
                   />
                   <span 
-                    className="text-sm text-indigo-600 hover:text-indigo-800 cursor-pointer"
+                    className="text-sm text-primary-600 hover:text-primary-800 cursor-pointer"
                     onClick={() => navigate(`/vendors/${meal.vendorId}`)}
                   >
                     {meal.vendor.name}
@@ -242,7 +242,7 @@ const MealDetail: React.FC<MealDetailProps> = ({ meal, isLoading, error }) => {
                     {meal.rating || '4.5'} ({meal.reviewCount || '10'} reviews)
                   </span>
                 </div>
-                <div className="text-2xl font-bold text-indigo-600">
+                <div className="text-2xl font-bold text-primary-600">
                   ${meal.price.toFixed(2)}
                 </div>
               </div>
@@ -253,19 +253,19 @@ const MealDetail: React.FC<MealDetailProps> = ({ meal, isLoading, error }) => {
               <nav className="-mb-px flex space-x-8">
                 <button
                   onClick={() => setActiveTab('description')}
-                  className={`pb-4 border-b-2 font-medium text-sm ${activeTab === 'description' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                  className={`pb-4 border-b-2 font-medium text-sm ${activeTab === 'description' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
                 >
                   Description
                 </button>
                 <button
                   onClick={() => setActiveTab('ingredients')}
-                  className={`pb-4 border-b-2 font-medium text-sm ${activeTab === 'ingredients' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                  className={`pb-4 border-b-2 font-medium text-sm ${activeTab === 'ingredients' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
                 >
                   Ingredients & Allergens
                 </button>
                 <button
                   onClick={() => setActiveTab('nutritional')}
-                  className={`pb-4 border-b-2 font-medium text-sm ${activeTab === 'nutritional' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                  className={`pb-4 border-b-2 font-medium text-sm ${activeTab === 'nutritional' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
                 >
                   Nutritional Info
                 </button>
@@ -286,7 +286,7 @@ const MealDetail: React.FC<MealDetailProps> = ({ meal, isLoading, error }) => {
                 <textarea
                   id="special-instructions"
                   rows={2}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                   placeholder="Any special requests or dietary concerns?"
                   value={specialInstructions}
                   onChange={(e) => setSpecialInstructions(e.target.value)}
@@ -330,7 +330,7 @@ const MealDetail: React.FC<MealDetailProps> = ({ meal, isLoading, error }) => {
                   <button
                     onClick={handleAddToCart}
                     disabled={!meal.isAvailable}
-                    className={`add-to-cart-btn w-full py-3 px-4 rounded-lg font-medium text-white ${meal.isAvailable ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-400 cursor-not-allowed'} transition-colors flex items-center justify-center`}
+                    className={`add-to-cart-btn w-full py-3 px-4 rounded-lg font-medium text-white ${meal.isAvailable ? 'bg-primary-600 hover:bg-primary-700' : 'bg-gray-400 cursor-not-allowed'} transition-colors flex items-center justify-center`}
                   >
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />

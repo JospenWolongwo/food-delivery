@@ -93,7 +93,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectTo = '/' }) => {
           </h2>
           <p className="mt-2 text-sm text-center text-gray-600">
             Or{' '}
-            <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+            <Link to="/register" className="font-medium text-primary-600 hover:text-primary-500">
               create a new account
             </Link>
           </p>
@@ -116,7 +116,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectTo = '/' }) => {
                 name="email"
                 type="email"
                 autoComplete="email"
-                className={`relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ${
+                className={`relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm ${
                   formErrors.email ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="Email address"
@@ -137,7 +137,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectTo = '/' }) => {
                 name="password"
                 type="password"
                 autoComplete="current-password"
-                className={`relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ${
+                className={`relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm ${
                   formErrors.password ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="Password"
@@ -156,7 +156,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectTo = '/' }) => {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
               />
               <label htmlFor="remember-me" className="block ml-2 text-sm text-gray-900">
                 Remember me
@@ -164,7 +164,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectTo = '/' }) => {
             </div>
             
             <div className="text-sm">
-              <Link to="/forgot-password" className="font-medium text-indigo-600 hover:text-indigo-500">
+              <Link to="/forgot-password" className="font-medium text-primary-600 hover:text-primary-500">
                 Forgot your password?
               </Link>
             </div>
@@ -173,7 +173,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectTo = '/' }) => {
           <div>
             <button
               type="submit"
-              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md group hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               disabled={isLoading}
             >
               {isLoading ? (
