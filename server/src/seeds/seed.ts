@@ -1,24 +1,31 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
-import { getRepository } from 'typeorm';
+import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
+import { DataSource } from 'typeorm';
 
 // Import your entities
-// Update these imports based on your actual entity paths
-import { User } from '../users/entities/user.entity';
+import { User, UserRole } from '../users/entities/user.entity';
 import { Vendor } from '../vendors/entities/vendor.entity';
 import { Meal } from '../meals/entities/meal.entity';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  
+  // Declare app variable outside the try block so it's available in the catch block
+  let app;
+
   try {
     console.log('Starting database seeding...');
     
+    // Create a NestJS application instance
+    app = await NestFactory.createApplicationContext(AppModule);
+    
+    // Get the DataSource
+    const dataSource = app.get<DataSource>(getDataSourceToken());
+    
     // Get repositories
-    const userRepository = getRepository(User);
-    const vendorRepository = getRepository(Vendor);
-    const mealRepository = getRepository(Meal);
+    const userRepository = dataSource.getRepository(User);
+    const vendorRepository = dataSource.getRepository(Vendor);
+    const mealRepository = dataSource.getRepository(Meal);
     
     // Create admin user
     console.log('Creating admin user...');
@@ -26,10 +33,9 @@ async function bootstrap() {
     const adminUser = userRepository.create({
       email: 'admin@campusfoods.com',
       password: hashedPassword,
-      firstName: 'Admin',
-      lastName: 'User',
+      name: 'Admin User',
       phoneNumber: '237612345678',
-      role: 'admin'
+      role: UserRole.ADMIN
     });
     await userRepository.save(adminUser);
     
@@ -39,10 +45,9 @@ async function bootstrap() {
     const testUser = userRepository.create({
       email: 'test@example.com',
       password: testUserPassword,
-      firstName: 'Test',
-      lastName: 'User',
+      name: 'Test User',
       phoneNumber: '237612345679',
-      role: 'user'
+      role: UserRole.CUSTOMER
     });
     await userRepository.save(testUser);
     
@@ -55,9 +60,7 @@ async function bootstrap() {
       logoUrl: '/images/vendor-placeholder.svg',
       phoneNumber: '237612345680',
       email: 'contact@mamaafrica.com',
-      isActive: true,
-      deliveryFee: 500,
-      minimumOrderAmount: 2000
+      isActive: true
     });
     await vendorRepository.save(vendor1);
     
@@ -68,9 +71,7 @@ async function bootstrap() {
       logoUrl: '/images/vendor-placeholder.svg',
       phoneNumber: '237612345681',
       email: 'contact@chezpierre.com',
-      isActive: true,
-      deliveryFee: 500,
-      minimumOrderAmount: 2500
+      isActive: true
     });
     await vendorRepository.save(vendor2);
     
@@ -84,15 +85,8 @@ async function bootstrap() {
       price: 3500,
       imageUrl: '/meals/ndole.jpg',
       isAvailable: true,
-      preparationTime: 20,
       category: 'Traditional',
-      vendor: vendor1,
-      nutritionalInfo: {
-        calories: 580,
-        protein: 25,
-        carbohydrates: 40,
-        fat: 15
-      }
+      vendor: vendor1
     });
     await mealRepository.save(ndole);
     
@@ -103,15 +97,8 @@ async function bootstrap() {
       price: 4200,
       imageUrl: '/meals/grilled-chicken.jpg',
       isAvailable: true,
-      preparationTime: 25,
       category: 'Traditional',
-      vendor: vendor2,
-      nutritionalInfo: {
-        calories: 650,
-        protein: 30,
-        carbohydrates: 35,
-        fat: 18
-      }
+      vendor: vendor2
     });
     await mealRepository.save(pouletDG);
     
@@ -122,15 +109,8 @@ async function bootstrap() {
       price: 3000,
       imageUrl: '/meals/eru.jpg',
       isAvailable: true,
-      preparationTime: 20,
       category: 'Traditional',
-      vendor: vendor1,
-      nutritionalInfo: {
-        calories: 450,
-        protein: 20,
-        carbohydrates: 30,
-        fat: 10
-      }
+      vendor: vendor1
     });
     await mealRepository.save(eru);
     
@@ -141,15 +121,8 @@ async function bootstrap() {
       price: 3200,
       imageUrl: '/meals/jollof-rice.jpg',
       isAvailable: true,
-      preparationTime: 15,
       category: 'Rice',
-      vendor: vendor2,
-      nutritionalInfo: {
-        calories: 520,
-        protein: 22,
-        carbohydrates: 45,
-        fat: 12
-      }
+      vendor: vendor2
     });
     await mealRepository.save(jollofRice);
     
@@ -160,15 +133,8 @@ async function bootstrap() {
       price: 3200,
       imageUrl: '/meals/borny-fish.jpg',
       isAvailable: true,
-      preparationTime: 18,
       category: 'Fish',
-      vendor: vendor1,
-      nutritionalInfo: {
-        calories: 520,
-        protein: 28,
-        carbohydrates: 25,
-        fat: 15
-      }
+      vendor: vendor1
     });
     await mealRepository.save(bornyFish);
     
@@ -178,23 +144,21 @@ async function bootstrap() {
       price: 3200,
       imageUrl: '/meals/okok.jpg',
       isAvailable: true,
-      preparationTime: 22,
       category: 'Traditional',
-      vendor: vendor1,
-      nutritionalInfo: {
-        calories: 520,
-        protein: 20,
-        carbohydrates: 40,
-        fat: 18
-      }
+      vendor: vendor1
     });
     await mealRepository.save(okok);
     
     console.log('Database seeding completed successfully!');
+    // Close the application when done
+    await app.close();
   } catch (error) {
     console.error('Error during database seeding:', error);
-  } finally {
-    await app.close();
+    // Make sure to close the app even if there's an error
+    if (app) {
+      await app.close();
+    }
+    process.exit(1);
   }
 }
 
