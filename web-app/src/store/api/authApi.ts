@@ -7,24 +7,34 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+  phoneNumber?: string; // Optional phone number
+}
+
+export interface User {
+  id: number;
+  name: string;
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
-  role?: string; // Optional, defaults to 'customer' on the backend
+  phoneNumber?: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface AuthResponse {
-  user: {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    role: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+  user: User;
   token: string;
+}
+
+export interface UpdateProfileRequest {
+  name?: string;
+  phoneNumber?: string;
+  currentPassword?: string;
+  newPassword?: string;
 }
 
 export interface SocialAuthRequest {
@@ -88,6 +98,15 @@ export const authApi = api.injectEndpoints({
       // This will only be cached with the 'User' tag
       providesTags: ['User'],
     }),
+    
+    updateProfile: builder.mutation<User, UpdateProfileRequest>({
+      query: (profileData) => ({
+        url: '/users/profile',
+        method: 'PATCH',
+        body: profileData,
+      }),
+      invalidatesTags: ['User'],
+    }),
   }),
   
   // This ensures that these endpoints won't be overridden by future calls to injectEndpoints
@@ -99,6 +118,7 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useGetProfileQuery,
+  useUpdateProfileMutation,
   useSocialAuthMutation,
   useGetOAuthUrlMutation,
 } = authApi;

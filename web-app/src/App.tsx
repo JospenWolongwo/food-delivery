@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { gsap } from 'gsap';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Import pages
 import HomePage from './pages/HomePage';
@@ -10,6 +12,14 @@ import MealsPage from './pages/MealsPage';
 import MealDetailPage from './pages/MealDetailPage';
 import CheckoutPage from './pages/CheckoutPage';
 import NotFoundPage from './pages/NotFoundPage';
+import ProfilePage from './pages/ProfilePage';
+import OrdersPage from './pages/OrdersPage';
+
+// Protected Route component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const isAuthenticated = localStorage.getItem('token') !== null;
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
+};
 
 // Import components
 import Header from './components/layout/Header';
@@ -52,11 +62,39 @@ function App() {
           <Route path="/meals" element={<MealsPage />} />
           <Route path="/meals/:id" element={<MealDetailPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/orders" 
+            element={
+              <ProtectedRoute>
+                <OrdersPage />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
       
       <Footer />
+      <ToastContainer 
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 }

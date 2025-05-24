@@ -134,10 +134,9 @@ const RegisterPage = () => {
       const firstName = nameParts[0];
       const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
       
-      // Call the register mutation from our authApi
+      // Combine first and last name into a single name field as expected by the backend
       await register({
-        firstName,
-        lastName,
+        name: `${firstName} ${lastName}`.trim(),
         email,
         password,
         phoneNumber: phoneNumber || undefined

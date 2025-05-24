@@ -101,6 +101,11 @@ export class MealFilterDto {
   @IsNumber()
   @Type(() => Number)
   maxPrice?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  @Type(() => Boolean)
+  isFeatured?: boolean;
 }
 
 export class MealsPageResponseDto {

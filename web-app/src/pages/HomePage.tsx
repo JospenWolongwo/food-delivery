@@ -73,8 +73,8 @@ const HomePage = () => {
       window.clearInterval(slideInterval.current);
     }
 
-    // Set up new interval
-    slideInterval.current = window.setInterval(advanceSlide, 5000);
+    // Set up new interval with 8 second delay
+    slideInterval.current = window.setInterval(advanceSlide, 8000);
 
     // Clean up interval on unmount
     return () => {
@@ -335,7 +335,7 @@ const HomePage = () => {
             {/* Carousel Controls */}
             <button
               onClick={prevSlide}
-              className="carousel-control absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-primary-600 p-2 rounded-full z-20 focus:outline-none transition-all duration-300"
+              className="carousel-control absolute left-4 top-1/2 transform -translate-y-1/2 bg-secondary-100/80 hover:bg-secondary-200 text-primary-600 p-2 rounded-full z-20 focus:outline-none transition-all duration-300"
               aria-label="Previous slide"
             >
               <svg
@@ -355,7 +355,7 @@ const HomePage = () => {
             </button>
             <button
               onClick={nextSlide}
-              className="carousel-control absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-primary-600 p-2 rounded-full z-20 focus:outline-none transition-all duration-300"
+              className="carousel-control absolute right-4 top-1/2 transform -translate-y-1/2 bg-secondary-100/80 hover:bg-secondary-200 text-primary-600 p-2 rounded-full z-20 focus:outline-none transition-all duration-300"
               aria-label="Next slide"
             >
               <svg
@@ -382,8 +382,8 @@ const HomePage = () => {
                   onClick={() => goToSlide(index)}
                   className={`w-3 h-3 rounded-full transition-all duration-300 ${
                     index === activeSlide
-                      ? "bg-white scale-125"
-                      : "bg-white/50 hover:bg-white/70"
+                      ? "bg-secondary-500 scale-125"
+                      : "bg-secondary-300/50 hover:bg-secondary-400/70"
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
@@ -401,10 +401,10 @@ const HomePage = () => {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <div className="bg-white p-8 rounded-lg shadow-md text-center feature-item">
-              <div className="bg-primary-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+            <div className="bg-secondary-50 p-8 rounded-lg shadow-md text-center feature-item">
+              <div className="bg-secondary-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
                 <svg
-                  className="w-8 h-8 text-primary-600"
+                  className="w-8 h-8 text-secondary-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -425,10 +425,10 @@ const HomePage = () => {
               </p>
             </div>
 
-            <div className="bg-white p-8 rounded-lg shadow-md text-center feature-item">
-              <div className="bg-primary-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+            <div className="bg-secondary-50 p-8 rounded-lg shadow-md text-center feature-item">
+              <div className="bg-secondary-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
                 <svg
-                  className="w-8 h-8 text-primary-600"
+                  className="w-8 h-8 text-secondary-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -449,10 +449,10 @@ const HomePage = () => {
               </p>
             </div>
 
-            <div className="bg-white p-8 rounded-lg shadow-md text-center feature-item">
-              <div className="bg-primary-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+            <div className="bg-secondary-50 p-8 rounded-lg shadow-md text-center feature-item">
+              <div className="bg-secondary-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
                 <svg
-                  className="w-8 h-8 text-primary-600"
+                  className="w-8 h-8 text-secondary-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -480,7 +480,7 @@ const HomePage = () => {
       <FeaturedMeals />
 
       {/* How It Works Section */}
-      <div ref={howItWorksRef} className="py-20">
+      <div ref={howItWorksRef} className="py-20 bg-secondary-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="section-title text-3xl font-bold text-center mb-16">
             How It Works
@@ -489,7 +489,7 @@ const HomePage = () => {
           <div className="space-y-16">
             <div className="flex flex-col md:flex-row items-center step-item">
               <div className="md:w-1/2 mb-8 md:mb-0 md:pr-10">
-                <div className="bg-primary-100 text-primary-600 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mb-4">
+                <div className="bg-secondary-100 text-secondary-700 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mb-4">
                   1
                 </div>
                 <h3 className="text-2xl font-semibold mb-4">
@@ -514,7 +514,7 @@ const HomePage = () => {
 
             <div className="flex flex-col md:flex-row-reverse items-center step-item">
               <div className="md:w-1/2 mb-8 md:mb-0 md:pl-10">
-                <div className="bg-primary-100 text-primary-600 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mb-4">
+                <div className="bg-secondary-100 text-secondary-700 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mb-4">
                   2
                 </div>
                 <h3 className="text-2xl font-semibold mb-4">Browse & Order</h3>
@@ -536,7 +536,7 @@ const HomePage = () => {
 
             <div className="flex flex-col md:flex-row items-center step-item">
               <div className="md:w-1/2 mb-8 md:mb-0 md:pr-10">
-                <div className="bg-primary-100 text-primary-600 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mb-4">
+                <div className="bg-secondary-100 text-secondary-700 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mb-4">
                   3
                 </div>
                 <h3 className="text-2xl font-semibold mb-4">
@@ -560,7 +560,7 @@ const HomePage = () => {
 
             <div className="flex flex-col md:flex-row-reverse items-center step-item">
               <div className="md:w-1/2 mb-8 md:mb-0 md:pl-10">
-                <div className="bg-primary-100 text-primary-600 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mb-4">
+                <div className="bg-secondary-100 text-secondary-700 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mb-4">
                   4
                 </div>
                 <h3 className="text-2xl font-semibold mb-4">Enjoy & Repeat</h3>
@@ -593,7 +593,7 @@ const HomePage = () => {
           </p>
           <Link
             to="/register"
-            className="bg-white hover:bg-gray-100 text-primary-600 font-bold py-3 px-8 rounded transition-colors duration-200 text-lg"
+            className="bg-secondary-100 hover:bg-secondary-200 text-primary-700 font-bold py-3 px-8 rounded transition-colors duration-200 text-lg"
           >
             Sign Up Now
           </Link>

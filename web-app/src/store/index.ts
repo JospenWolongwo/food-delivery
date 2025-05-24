@@ -7,7 +7,7 @@ import { api } from './api';
 // Import all API endpoints directly from their modules to avoid circular dependencies
 import { authApi } from './api/authApi';
 import { mealsApi } from './api/mealsApi';
-import { ordersApi } from './api/ordersApi';
+import { orderApi } from './api/orderApi';
 import { vendorsApi } from './api/vendorsApi';
 
 export const store = configureStore({
@@ -37,6 +37,6 @@ export {
   api,
   authApi,
   mealsApi,
-  ordersApi,
+  orderApi,
   vendorsApi,
 };

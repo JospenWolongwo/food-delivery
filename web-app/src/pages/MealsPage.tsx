@@ -57,6 +57,34 @@ const MealsPage: React.FC = () => {
     // You could update the URL here if you want to make the search sharable
   };
   
+  // Filter out any undefined values from params
+  const getFilteredParams = () => {
+    const params: Record<string, string | number> = {};
+    
+    // Only add parameters that have values
+    if (searchQuery) params.search = searchQuery;
+    if (category && category !== 'all') params.category = category;
+    if (vendorId) params.vendorId = vendorId;
+    
+    // Add default sorting
+    params.sortBy = 'createdAt';
+    params.sortOrder = 'desc';
+    
+    return params;
+  };
+  
+  // Update URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (searchQuery) params.set('search', searchQuery);
+    if (category) params.set('category', category);
+    if (vendorId) params.set('vendor', vendorId.toString());
+    
+    // Update URL without page reload
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.pushState({ path: newUrl }, '', newUrl);
+  }, [searchQuery, category, vendorId]);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
@@ -112,11 +140,14 @@ const MealsPage: React.FC = () => {
         </div>
         
         {/* Meal List */}
-        <MealList 
-          vendorId={vendorId}
-          category={category}
-          searchTerm={searchQuery}
-        />
+        <div className="meal-list-container">
+          <MealList 
+            searchTerm={searchQuery}
+            category={category}
+            vendorId={vendorId}
+            filters={getFilteredParams()}
+          />
+        </div>
       </div>
       
       {/* Cart Component */}

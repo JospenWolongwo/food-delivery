@@ -13,6 +13,8 @@ export interface Meal {
     id: number;
     name: string;
   };
+  rating?: number;
+  reviewCount?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -21,34 +23,36 @@ export interface GetMealsParams {
   category?: string;
   vendorId?: number;
   search?: string;
-  page?: number;
-  limit?: number;
+  // Removed page and limit as they'll be handled on the frontend
 }
 
 export interface MealsResponse {
-  items: Meal[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
+  data: {
+    items: Meal[];
+    total: number;
+    totalPages: number;
+  };
 }
 
 // Extend the base API with meal-specific endpoints
 export const mealsApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getMeals: builder.query<MealsResponse, GetMealsParams | void>({
+    getMeals: builder.query<Meal[], GetMealsParams | void>({
       query: (params = {}) => ({
         url: '/meals',
         method: 'GET',
-        params,
+        params: {
+          ...params
+        },
       }),
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.items.map(({ id }) => ({ type: 'Meals' as const, id })),
-              { type: 'Meals' as const, id: 'LIST' },
-            ]
-          : [{ type: 'Meals' as const, id: 'LIST' }],
+      transformResponse: (response: Meal[] | { data: Meal[] }) => {
+        // The API returns either an array of meals or an object with a data property containing the array
+        return Array.isArray(response) ? response : (response.data || []);
+      },
+      providesTags: (result = []) => [
+        ...result.map(({ id }) => ({ type: 'Meals' as const, id })),
+        { type: 'Meals' as const, id: 'LIST' },
+      ],
     }),
     
     getMealById: builder.query<Meal, number>({
@@ -56,9 +60,15 @@ export const mealsApi = api.injectEndpoints({
       providesTags: (result, error, id) => [{ type: 'Meals' as const, id }],
     }),
     
-    getFeaturedMeals: builder.query<Meal[], void>({
-      query: () => '/meals/featured',
-      providesTags: [{ type: 'Meals' as const, id: 'FEATURED' }],
+    deleteMeal: builder.mutation<{ success: boolean; id: number }, number>({
+      query: (id) => ({
+        url: `/meals/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: 'Meal', id },
+        { type: 'Meal', id: 'LIST' },
+      ],
     }),
     
     getMealsByCategory: builder.query<Meal[], string>({
@@ -72,15 +82,34 @@ export const mealsApi = api.injectEndpoints({
           : [{ type: 'Meals' as const, id: 'CATEGORY' }],
     }),
     
-    getRelatedMeals: builder.query<Meal[], number>({
-      query: (mealId) => `/meals/${mealId}/related`,
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Meals' as const, id })),
-              { type: 'Meals' as const, id: 'RELATED' },
-            ]
-          : [{ type: 'Meals' as const, id: 'RELATED' }],
+    getRelatedMeals: builder.query<Meal[], { mealId: number; limit?: number }>({
+      query: ({ mealId, limit = 4 }) => ({
+        url: `/meals/${mealId}/related`,
+        params: { limit },
+      }),
+      providesTags: (result, error, { mealId }) => [
+        { type: 'Meals' as const, id: `RELATED_${mealId}` },
+      ],
+    }),
+    
+    getFeaturedMeals: builder.query<Meal[], { limit?: number }>({
+      query: ({ limit = 5 } = {}) => ({
+        url: '/meals',
+        params: {
+          isFeatured: 'true',
+          limit: limit.toString()
+        }
+      }),
+      providesTags: [{ type: 'Meals' as const, id: 'FEATURED' }],
+      transformResponse: (response: { data: { items: Meal[] } } | Meal[]) => {
+        // Handle both response formats
+        if (Array.isArray(response)) {
+          return response;
+        } else if (response?.data?.items) {
+          return response.data.items;
+        }
+        return [];
+      },
     }),
   }),
   
@@ -88,11 +117,12 @@ export const mealsApi = api.injectEndpoints({
   overrideExisting: false,
 });
 
-// Export auto-generated hooks for the endpoints
+// Export hooks for usage in functional components
 export const {
   useGetMealsQuery,
   useGetMealByIdQuery,
   useGetFeaturedMealsQuery,
   useGetMealsByCategoryQuery,
   useGetRelatedMealsQuery,
+  useDeleteMealMutation,
 } = mealsApi;

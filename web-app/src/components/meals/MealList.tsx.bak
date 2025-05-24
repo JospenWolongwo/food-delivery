@@ -1,0 +1,605 @@
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useGetMealsQuery } from '../../store/api/mealsApi';
+import { Meal } from '../../store/api/types';
+import MealCard from './MealCard';
+import gsap from 'gsap';
+
+interface FilterState {
+  minPrice?: number;
+  maxPrice?: number;
+  sortBy?: string;
+  sortOrder?: string;
+  isAvailable?: boolean;
+}
+
+interface MealListProps {
+  vendorId?: number;
+  category?: string;
+  searchTerm?: string;
+  featured?: boolean;
+  limit?: number;
+  filters?: Record<string, string | number | undefined>;
+}
+
+const ITEMS_PER_PAGE = 12;
+
+const MealList: React.FC<MealListProps> = ({
+  vendorId,
+  category,
+  searchTerm = '',
+  featured = false,
+  limit,
+  filters,
+}) => {
+  const [page, setPage] = useState(1);
+  const [localFilters, setLocalFilters] = useState<FilterState>({});
+
+  // Prepare query parameters (without pagination and sorting)
+  const queryParams = React.useMemo(() => ({
+    search: searchTerm,
+    category,
+    vendorId,
+    ...(filters || {}), // Safely spread filters if they exist
+  }), [searchTerm, category, vendorId, filters]);
+
+  // Destructure local filters
+  const { sortBy, sortOrder, isAvailable, minPrice, maxPrice } = localFilters;
+
+  // Fetch all meals using RTK Query
+  const { data: response, isLoading, error, refetch } = useGetMealsQuery(queryParams);
+  const allMeals = response?.data?.items || [];
+  
+  // Apply filtering based on local filters
+  let filteredMeals = [...allMeals];
+  
+  // Apply availability filter
+  if (isAvailable) {
+    filteredMeals = filteredMeals.filter(meal => meal.isAvailable);
+  }
+  
+  // Apply price range filters
+  if (localFilters.minPrice !== undefined) {
+    filteredMeals = filteredMeals.filter(meal => meal.price >= Number(localFilters.minPrice));
+  }
+  if (localFilters.maxPrice !== undefined) {
+    filteredMeals = filteredMeals.filter(meal => meal.price <= Number(localFilters.maxPrice));
+  }
+  
+  // Handle pagination on the frontend
+  const itemsPerPage = 12;
+  const totalItems = filteredMeals.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  
+  // Apply sorting if specified
+  if (sortBy) {
+    const currentSortOrder = sortOrder === 'desc' ? -1 : 1;
+    filteredMeals = [...filteredMeals].sort((a, b) => {
+      // @ts-ignore - We know these properties exist
+      if (a[sortBy] < b[sortBy]) return -1 * currentSortOrder;
+      // @ts-ignore
+      if (a[sortBy] > b[sortBy]) return 1 * currentSortOrder;
+      return 0;
+    });
+  }
+  
+  // Get current page items
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const meals = filteredMeals.slice(startIndex, endIndex);
+
+  // Refetch when query parameters change
+  useEffect(() => {
+    // Only refetch if we have valid query parameters
+    refetch();
+  }, [queryParams, refetch]);
+
+  // Animation for filter changes and new data
+  useEffect(() => {
+    if (meals.length > 0 && !isLoading) {
+      gsap.fromTo(
+        '.meal-grid > div',
+        { opacity: 0, y: 20 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          stagger: 0.05, 
+          duration: 0.3, 
+          ease: 'power2.out',
+          clearProps: 'all' // Clear any existing animations
+        }
+      );
+    }
+  }, [meals, isLoading, localFilters]); // Add localFilters to dependency array
+
+  // Handle price filter changes
+  const handlePriceFilterChange = (
+    type: 'minPrice' | 'maxPrice',
+    value: string
+  ) => {
+    // Only allow numbers and empty string
+    if (value !== '' && isNaN(Number(value))) {
+      return;
+    }
+    
+    const numValue = value === '' ? undefined : Math.max(0, Number(value));
+    setLocalFilters(prev => ({
+      ...prev,
+      [type]: numValue,
+      // Ensure min price is not greater than max price
+      ...(type === 'minPrice' && localFilters.maxPrice !== undefined && numValue !== undefined && numValue > localFilters.maxPrice 
+        ? { maxPrice: numValue } 
+        : {}),
+      // Ensure max price is not less than min price
+      ...(type === 'maxPrice' && localFilters.minPrice !== undefined && numValue !== undefined && numValue < localFilters.minPrice
+        ? { minPrice: numValue }
+        : {})
+    }));
+    // Reset to first page when price filter changes
+    setPage(1);
+  };
+
+  // Handle sort change
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const sortValue = e.target.value;
+    if (sortValue) {
+      // Split the value into field and order parts
+      const [sortBy, sortOrder] = sortValue.split(':');
+      setLocalFilters(prev => ({
+        ...prev,
+        sortBy,
+        sortOrder: sortOrder || 'asc'
+      }));
+    } else {
+      // If no sort value is selected, remove sort parameters
+      const { sortBy, sortOrder, ...rest } = localFilters;
+      setLocalFilters(rest);
+    }
+    // Reset to first page when sort changes
+    setPage(1);
+  };
+  
+  // Get current sort value for the select element
+  const getCurrentSortValue = () => {
+    if (sortBy && sortOrder) {
+      return `${sortBy}:${sortOrder}`;
+    }
+    return '';
+  };
+
+  // Handle availability filter
+  const handleAvailabilityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalFilters(prev => ({
+      ...prev,
+      isAvailable: e.target.checked ? true : undefined,
+    }));
+    // Reset to first page when availability filter changes
+    setPage(1);
+  };
+
+  // Handle pagination
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    
+    // Scroll to top of meal list
+    window.scrollTo({
+      top: document.querySelector('.meal-list-container')?.getBoundingClientRect().top || 0,
+      behavior: 'smooth'
+    });
+  };
+
+  // Handle loading state
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {[...Array(8)].map((_, index) => (
+          <div key={index} className="animate-pulse rounded-lg bg-gray-200 h-80 w-full"></div>
+        ))}
+      </div>
+    );
+  }
+
+  // Handle error state
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-red-500 text-lg font-medium mb-2">Error loading meals</div>
+        <p className="text-gray-600 mb-4">Please try again later</p>
+        <button
+          onClick={() => refetch()}
+          className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  // Handle no results
+  if (meals.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-gray-500 text-lg">No meals found</div>
+        <p className="text-gray-400">Try adjusting your search or filters</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+      {/* Filters */}
+      <div className="bg-white p-4 rounded-lg shadow">
+        <div className="flex flex-wrap items-center gap-4">
+          {/* Price Range */}
+          <div className="flex items-center space-x-2">
+            <label className="text-sm font-medium text-gray-700">Price:</label>
+            <input
+              type="number"
+              placeholder="Min"
+              className="w-20 px-2 py-1 border rounded"
+              value={localFilters.minPrice || ''}
+              onChange={(e) => handlePriceFilterChange('minPrice', e.target.value)}
+            />
+            <span>-</span>
+            <input
+              type="number"
+              placeholder="Max"
+              className="w-20 px-2 py-1 border rounded"
+              value={localFilters.maxPrice || ''}
+              onChange={(e) => handlePriceFilterChange('maxPrice', e.target.value)}
+            />
+          </div>
+
+          {/* Sort */}
+          <div className="flex items-center space-x-2">
+            <label className="text-sm font-medium text-gray-700">Sort by:</label>
+            <select
+              className="px-2 py-1 border rounded"
+              value={getCurrentSortValue()}
+              onChange={handleSortChange}
+            >
+              <option value="">Default</option>
+              <option value="price:asc">Price: Low to High</option>
+              <option value="price:desc">Price: High to Low</option>
+              <option value="name:asc">Name: A to Z</option>
+              <option value="name:desc">Name: Z to A</option>
+              <option value="createdAt:desc">Newest First</option>
+            </select>
+          </div>
+
+          {/* Availability */}
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="available"
+              className="rounded text-primary-600 focus:ring-primary-500"
+              checked={!!localFilters.isAvailable}
+              onChange={handleAvailabilityChange}
+            />
+            <label htmlFor="available" className="text-sm text-gray-700">
+              Available only
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Meals Grid */}
+      <div className="meal-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {meals.map((meal) => (
+          <MealCard key={meal.id} meal={meal} />
+        ))}
+      </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-8">
+          <div className="flex space-x-2">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+              <button
+                key={pageNum}
+                onClick={() => handlePageChange(pageNum)}
+                className={`px-3 py-1 rounded ${
+                  page === pageNum
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                {pageNum}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  if (error) {
+    return (
+      <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 my-4 rounded">
+        <p>Error loading meals. Please try again later.</p>
+      </div>
+    );
+  }
+
+  if (!mealsData || mealsData.items.length === 0) {
+    return (
+      <div className="bg-gray-100 p-8 rounded-lg text-center my-8">
+        <h3 className="text-xl font-semibold text-gray-700 mb-2">
+          No meals found
+        </h3>
+        <p className="text-gray-600">
+          Try adjusting your filters or check back later for new offerings.
+        </p>
+      </div>
+    );
+  }
+  // Handle loading state
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {[...Array(8)].map((_, index) => (
+          <div key={index} className="animate-pulse rounded-lg bg-gray-200 h-80 w-full"></div>
+        ))}
+      </div>
+    );
+  }
+
+  // Handle error state
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-red-500 text-lg font-medium mb-2">Error loading meals</div>
+        <p className="text-gray-600 mb-4">Please try again later</p>
+        <button
+          onClick={() => refetch()}
+          className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  // Handle no results
+  if (meals.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-gray-500 text-lg">No meals found</div>
+        <p className="text-gray-400">Try adjusting your search or filters</p>
+      </div>
+    );
+  }
+
+  const renderFilters = () => (
+    <div className="bg-white p-4 rounded-lg shadow">
+      <div className="flex flex-wrap items-center gap-4">
+        {/* Price Range */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label htmlFor="priceRange" className="block text-sm font-medium text-gray-700">
+              Price Range
+            </label>
+            <span className="text-xs text-gray-500">
+              {localFilters.minPrice !== undefined || localFilters.maxPrice !== undefined
+                ? `${localFilters.minPrice ?? '0'} - ${localFilters.maxPrice ?? '∞'}`
+                : 'Any'}
+            </span>
+          </div>
+          <div className="flex space-x-2">
+            <div className="flex-1">
+              <div className="relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <span className="text-gray-500 sm:text-sm">$</span>
+                </div>
+                <input
+                  type="number"
+                  id="minPrice"
+                  min="0"
+                  step="0.01"
+                  placeholder="Min"
+                  className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md text-sm"
+                  value={localFilters.minPrice ?? ''}
+                  onChange={(e) => handlePriceFilterChange('minPrice', e.target.value)}
+                  aria-label="Minimum price"
+                />
+              </div>
+            </div>
+            <div className="flex items-center text-gray-500">
+              <span className="text-sm">to</span>
+            </div>
+            <div className="flex-1">
+              <div className="relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <span className="text-gray-500 sm:text-sm">$</span>
+                </div>
+                <input
+                  type="number"
+                  id="maxPrice"
+                  min="0"
+                  step="0.01"
+                  placeholder="Max"
+                  className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md text-sm"
+                  value={localFilters.maxPrice ?? ''}
+                  onChange={(e) => handlePriceFilterChange('maxPrice', e.target.value)}
+                  aria-label="Maximum price"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Sort */}
+        <div className="flex items-center space-x-2">
+          <label className="text-sm font-medium text-gray-700">Sort by:</label>
+          <select
+            className="px-2 py-1 border rounded"
+            value={getCurrentSortValue()}
+            onChange={handleSortChange}
+          >
+            <option value="">Default</option>
+            <option value="price:asc">Price: Low to High</option>
+            <option value="price:desc">Price: High to Low</option>
+            <option value="name:asc">Name: A to Z</option>
+            <option value="name:desc">Name: Z to A</option>
+            <option value="createdAt:desc">Newest First</option>
+          </select>
+        </div>
+
+        {/* Availability */}
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            id="available"
+            className="rounded text-primary-600 focus:ring-primary-500"
+            checked={!!localFilters.isAvailable}
+            onChange={handleAvailabilityChange}
+          />
+          <label htmlFor="available" className="text-sm text-gray-700">
+            Available only
+          </label>
+        </div>
+      </div>
+    </div>
+
+    {/* Meals Grid */}
+    <div className="meal-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {meals.map((meal) => (
+        <MealCard key={meal.id} meal={meal} />
+      ))}
+    </div>
+
+    {/* Pagination */}
+    {totalPages > 1 && (
+      <div className="flex justify-center mt-8">
+        <div className="flex space-x-2">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+            <button
+              key={pageNum}
+              onClick={() => handlePageChange(pageNum)}
+              className={`px-3 py-1 rounded ${
+                page === pageNum
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              {pageNum}
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+);
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+              value={getCurrentSortValue()}
+              onChange={handleSortChange}
+            >
+              <option value="">Default</option>
+              <option value="name:asc">Name (A-Z)</option>
+              <option value="name:desc">Name (Z-A)</option>
+              <option value="price:asc">Price: Low to High</option>
+              <option value="price:desc">Price: High to Low</option>
+              <option value="createdAt:desc">Newest First</option>
+            </select>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="available"
+              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              checked={!!localFilters.isAvailable}
+              onChange={handleAvailabilityChange}
+            />
+            <label htmlFor="available" className="text-sm text-gray-700">
+              Available Only
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Meals grid */}
+      <div className="meal-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {meals.map((meal) => (
+          <MealCard key={meal.id} meal={meal} />
+        ))}
+      </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-8">
+          <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+            <button
+              onClick={() => handlePageChange(page - 1)}
+              disabled={page === 1}
+              className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${page === 1 ? 'text-gray-300' : 'text-gray-500 hover:bg-gray-50'}`}
+            >
+              <span className="sr-only">Previous</span>
+              <svg
+                className="h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+
+            {/* Page numbers */}
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              let pageNumber: number;
+              const middlePage = Math.min(Math.max(page, 3), totalPages - 2);
+              
+              if (totalPages <= 5) {
+                pageNumber = i + 1;
+              } else if (i === 0) {
+                pageNumber = 1;
+              } else if (i === 4) {
+                pageNumber = totalPages;
+              } else {
+                pageNumber = middlePage + i - 2;
+              }
+              
+              return (
+                <button
+                  key={pageNumber}
+                  onClick={() => handlePageChange(pageNumber)}
+                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${page === pageNumber ? 'text-primary-600 bg-primary-50' : 'text-gray-700 hover:bg-gray-50'}`}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
+
+            <button
+              onClick={() => handlePageChange(page + 1)}
+              disabled={page === totalPages}
+              className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${page === totalPages ? 'text-gray-300' : 'text-gray-500 hover:bg-gray-50'}`}
+            >
+              <span className="sr-only">Next</span>
+              <svg
+                className="h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          </nav>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default MealList;

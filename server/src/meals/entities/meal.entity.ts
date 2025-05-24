@@ -25,6 +25,9 @@ export class Meal {
   @Column({ default: true })
   isAvailable: boolean;
 
+  @Column({ default: false })
+  isFeatured: boolean;
+
   @ManyToOne(() => Vendor, (vendor) => vendor.meals)
   vendor: Vendor;
 

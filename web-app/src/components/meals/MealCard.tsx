@@ -68,10 +68,27 @@ const MealCard: React.FC<MealCardProps> = ({ meal, featured = false }) => {
     }
   };
   
+  if (!meal) {
+    return (
+      <div className="animate-pulse rounded-lg bg-gray-200 h-64 w-full"></div>
+    );
+  }
+
+  // Format price as FCFA (West African CFA franc)
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('fr-FR', {
+      style: 'decimal',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(price) + ' FCFA';
+  };
+
   return (
     <div
       ref={cardRef}
-      className={`rounded-lg overflow-hidden shadow-md bg-white transition-all h-full ${featured ? 'md:flex' : ''}`}
+      className={`rounded-lg overflow-hidden shadow-md bg-white transition-all h-full flex flex-col hover:shadow-lg ${
+        featured ? 'md:flex-row' : ''
+      }`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -80,12 +97,14 @@ const MealCard: React.FC<MealCardProps> = ({ meal, featured = false }) => {
           <img
             src={meal.imageUrl || '/images/meal-placeholder.svg'}
             alt={meal.name}
-            className={`w-full h-48 object-cover ${featured ? 'md:h-full' : ''}`}
+            className={`w-full h-48 object-cover ${
+              featured ? 'md:h-full' : ''
+            }`}
             onError={(e) => {
               e.currentTarget.src = '/images/meal-placeholder.svg';
             }}
           />
-          {meal.isAvailable ? (
+          {meal.isAvailable !== false ? (
             <span className="absolute top-2 right-2 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
               Available
             </span>
@@ -99,46 +118,19 @@ const MealCard: React.FC<MealCardProps> = ({ meal, featured = false }) => {
               Featured
             </span>
           )}
+          {meal.vendor?.name && (
+            <span className="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white text-xs font-medium px-2 py-1 rounded">
+              {meal.vendor.name}
+            </span>
+          )}
         </div>
         
-        <div className={`p-4 ${featured ? 'md:w-1/2 md:flex md:flex-col md:justify-between' : ''}`}>
-          <div>
-            <div className="flex justify-between items-start">
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">{meal.name}</h3>
-              <p className="text-lg font-bold text-primary-600">{meal.price.toFixed(0)} FCFA</p>
-            </div>
+        <div className={`p-4 ${featured ? 'md:w-1/2' : ''} flex flex-col flex-1`}>
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">{meal.name}</h3>
+            <p className="text-sm text-gray-500 mb-3 line-clamp-2">{meal.description}</p>
             
-            <p className="text-sm text-gray-600 mb-3 line-clamp-2">{meal.description}</p>
-            
-            {meal.vendor && (
-              <div className="flex items-center mb-3">
-                <img
-                  src={meal.vendor.logoUrl || '/images/vendor-placeholder.svg'}
-                  alt={meal.vendor.name}
-                  className="w-6 h-6 rounded-full mr-2 bg-primary-100"
-                  onError={(e) => {
-                    e.currentTarget.src = '/images/vendor-placeholder.svg';
-                  }}
-                />
-                <span className="text-xs text-gray-500">{meal.vendor.name}</span>
-              </div>
-            )}
-            
-            {meal.category && (
-              <span className="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded mr-2 mb-2">
-                {meal.category}
-              </span>
-            )}
-            
-            {meal.nutritionalInfo?.calories && (
-              <span className="inline-block bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded mr-2 mb-2">
-                {meal.nutritionalInfo.calories} cal
-              </span>
-            )}
-          </div>
-          
-          <div className="mt-4 flex justify-between items-center">
-            <div className="flex items-center">
+            <div className="flex items-center mb-4">
               <svg className="w-4 h-4 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
@@ -146,13 +138,25 @@ const MealCard: React.FC<MealCardProps> = ({ meal, featured = false }) => {
                 {meal.rating || '4.5'} ({meal.reviewCount || '10'})
               </span>
             </div>
-            
-            <button
-              onClick={handleAddToCart}
-              className="bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium py-2 px-4 rounded-md transition-colors"
-            >
-              Add to Cart
-            </button>
+          </div>
+          
+          <div className="mt-auto pt-4 border-t border-gray-100">
+            <div className="flex items-center justify-between">
+              <span className="text-lg font-bold text-primary-600">
+                {formatPrice(meal.price)}
+              </span>
+              <button
+                onClick={handleAddToCart}
+                disabled={meal.isAvailable === false}
+                className={`px-4 py-2 rounded-md font-medium text-sm ${
+                  meal.isAvailable === false
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-primary-600 text-white hover:bg-primary-700'
+                }`}
+              >
+                {meal.isAvailable === false ? 'Unavailable' : 'Add to Cart'}
+              </button>
+            </div>
           </div>
         </div>
       </Link>

@@ -1,34 +1,46 @@
-import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { AppModule } from './app.module';
+import { NestFactory } from "@nestjs/core";
+import { ValidationPipe } from "@nestjs/common";
+import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+import { AppModule } from "./app.module";
+import { SeedService } from "./seeds/seed.service";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   // Enable CORS
   app.enableCors();
-  
+
   // Global validation pipe
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    transform: true,
-  }));
-  
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    })
+  );
+
   // Swagger API documentation
   const config = new DocumentBuilder()
-    .setTitle('Campus Food Delivery API')
-    .setDescription('The Campus Food Delivery System API')
-    .setVersion('1.0')
+    .setTitle("Campus Food Delivery API")
+    .setDescription("The Campus Food Delivery System API")
+    .setVersion("1.0")
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
-  
+  SwaggerModule.setup("api/docs", app, document);
+
   // Prefix all routes with /api
-  app.setGlobalPrefix('api');
-  
+  app.setGlobalPrefix("api");
+
+  // In production, you might want to run migrations here
+  if (
+    process.env.NODE_ENV === "production" &&
+    process.env.RUN_SEED === "true"
+  ) {
+    const seedService = app.get(SeedService);
+    await seedService.seedDatabase();
+  }
+
   // Use PORT from environment variables with fallback to 3000
   const port = process.env.PORT || 3000;
   await app.listen(port);

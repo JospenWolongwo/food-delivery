@@ -61,6 +61,12 @@ export class MealsService {
           maxPrice: filterDto.maxPrice,
         });
       }
+      
+      if (filterDto.isFeatured !== undefined) {
+        queryBuilder.andWhere('meal.isFeatured = :isFeatured', {
+          isFeatured: filterDto.isFeatured,
+        });
+      }
     }
     
     // Add pagination
