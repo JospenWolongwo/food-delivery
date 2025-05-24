@@ -17,6 +17,14 @@ export class SeedService {
 
     try {
       console.log("Starting database seeding...");
+
+      // Check if tables exist, if not, synchronize the database
+      const hasMealTable = await queryRunner.hasTable("meal");
+      if (!hasMealTable) {
+        console.log("Database tables not found. Synchronizing...");
+        await this.dataSource.synchronize();
+      }
+
       const userRepository = queryRunner.manager.getRepository(User);
       const vendorRepository = queryRunner.manager.getRepository(Vendor);
       const mealRepository = queryRunner.manager.getRepository(Meal);
