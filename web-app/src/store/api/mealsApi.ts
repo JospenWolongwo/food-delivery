@@ -96,17 +96,14 @@ export const mealsApi = api.injectEndpoints({
       query: ({ limit = 5 } = {}) => ({
         url: "api/meals",
         params: {
-          isFeatured: "true",
-          limit: limit.toString(),
+          isFeatured: true,
         },
       }),
       providesTags: [{ type: "Meals" as const, id: "FEATURED" }],
-      transformResponse: (response: { data: { items: Meal[] } } | Meal[]) => {
+      transformResponse: (response: any) => {
         // Handle both response formats
-        if (Array.isArray(response)) {
-          return response;
-        } else if (response?.data?.items) {
-          return response.data.items;
+        if (response && Array.isArray(response.data)) {
+          return response.data;
         }
         return [];
       },
