@@ -1,4 +1,4 @@
-import { api } from './index';
+import { api } from "./index";
 
 // Define types for meal requests and responses
 export interface Meal {
@@ -39,68 +39,68 @@ export const mealsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getMeals: builder.query<Meal[], GetMealsParams | void>({
       query: (params = {}) => ({
-        url: '/meals',
-        method: 'GET',
+        url: "api/meals",
+        method: "GET",
         params: {
-          ...params
+          ...params,
         },
       }),
       transformResponse: (response: Meal[] | { data: Meal[] }) => {
         // The API returns either an array of meals or an object with a data property containing the array
-        return Array.isArray(response) ? response : (response.data || []);
+        return Array.isArray(response) ? response : response.data || [];
       },
       providesTags: (result = []) => [
-        ...result.map(({ id }) => ({ type: 'Meals' as const, id })),
-        { type: 'Meals' as const, id: 'LIST' },
+        ...result.map(({ id }) => ({ type: "Meals" as const, id })),
+        { type: "Meals" as const, id: "LIST" },
       ],
     }),
-    
+
     getMealById: builder.query<Meal, number>({
-      query: (id) => `/meals/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Meals' as const, id }],
+      query: (id) => `api/meals/${id}`,
+      providesTags: (result, error, id) => [{ type: "Meals" as const, id }],
     }),
-    
+
     deleteMeal: builder.mutation<{ success: boolean; id: number }, number>({
       query: (id) => ({
-        url: `/meals/${id}`,
-        method: 'DELETE',
+        url: `api/meals/${id}`,
+        method: "DELETE",
       }),
       invalidatesTags: (result, error, id) => [
-        { type: 'Meal', id },
-        { type: 'Meal', id: 'LIST' },
+        { type: "Meal", id },
+        { type: "Meal", id: "LIST" },
       ],
     }),
-    
+
     getMealsByCategory: builder.query<Meal[], string>({
       query: (category) => `/meals/category/${category}`,
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'Meals' as const, id })),
-              { type: 'Meals' as const, id: 'CATEGORY' },
+              ...result.map(({ id }) => ({ type: "Meals" as const, id })),
+              { type: "Meals" as const, id: "CATEGORY" },
             ]
-          : [{ type: 'Meals' as const, id: 'CATEGORY' }],
+          : [{ type: "Meals" as const, id: "CATEGORY" }],
     }),
-    
+
     getRelatedMeals: builder.query<Meal[], { mealId: number; limit?: number }>({
       query: ({ mealId, limit = 4 }) => ({
-        url: `/meals/${mealId}/related`,
+        url: `api/meals/${mealId}/related`,
         params: { limit },
       }),
       providesTags: (result, error, { mealId }) => [
-        { type: 'Meals' as const, id: `RELATED_${mealId}` },
+        { type: "Meals" as const, id: `RELATED_${mealId}` },
       ],
     }),
-    
+
     getFeaturedMeals: builder.query<Meal[], { limit?: number }>({
       query: ({ limit = 5 } = {}) => ({
-        url: '/meals',
+        url: "api/meals",
         params: {
-          isFeatured: 'true',
-          limit: limit.toString()
-        }
+          isFeatured: "true",
+          limit: limit.toString(),
+        },
       }),
-      providesTags: [{ type: 'Meals' as const, id: 'FEATURED' }],
+      providesTags: [{ type: "Meals" as const, id: "FEATURED" }],
       transformResponse: (response: { data: { items: Meal[] } } | Meal[]) => {
         // Handle both response formats
         if (Array.isArray(response)) {
@@ -112,7 +112,7 @@ export const mealsApi = api.injectEndpoints({
       },
     }),
   }),
-  
+
   // This ensures that these endpoints won't be overridden by future calls to injectEndpoints
   overrideExisting: false,
 });
